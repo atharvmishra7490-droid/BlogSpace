@@ -1,0 +1,4 @@
+com\BlogSpace\BlogSpaceApplication.class
+com\BlogSpace\Blog.class
+com\BlogSpace\BlogController.class
+com\BlogSpace\BlogRepository.class

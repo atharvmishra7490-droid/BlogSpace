@@ -1,0 +1,140 @@
+2026-08-16T11:25:45.354Z [INFO] ----------------------invoke appmod-report-event----------------------
+2026-08-16T11:25:45.354Z [INFO] [Tool.invoke]({name: appmod-report-event, modelId: auto, input: {
+  "projectPath": "c:\\Users\\Atharv Mishra\\Desktop\\BlogSpace-java",
+  "event": "precheckCompleted",
+  "status": "succeeded",
+  "phase": "precheck",
+  "details": {
+    "components": [
+      {
+        "name": "jdk",
+        "baseVersion": "17",
+        "targetVersion": "25"
+      }
+    ]
+  }
+}}).
+2026-08-16T11:25:45.355Z [INFO] [Tool.invoke] do invoke.
+2026-08-16T11:25:45.357Z [INFO] Project c:\Users\Atharv Mishra\Desktop\BlogSpace-java is a maven project, try to get java version from pom.xml
+2026-08-16T11:25:45.360Z [INFO] [Tool.invoke]({result: {
+  "message": "Event 'precheckCompleted' reported!\nSession ID: 20260816112545,\nSession Dir: c:\\Users\\Atharv Mishra\\Desktop\\BlogSpace-java\\.github\\modernize\\java-upgrade\\20260816112545"
+}}).
+2026-08-16T11:25:45.361Z [INFO] ----------------------invoked appmod-report-event----------------------
+2026-08-16T11:25:45.365Z [INFO] Project java version: 17
+2026-08-16T11:25:45.366Z [INFO] Maven project detected.
+2026-08-16T11:25:45.367Z [INFO] Build tool type: mvnw
+2026-08-16T11:25:45.457Z [INFO] JDK: undefined
+2026-08-16T11:25:45.457Z [ERROR] Failed to detect or resolve JDK for the project at c:\Users\Atharv Mishra\Desktop\BlogSpace-java.
+2026-08-16T11:25:45.458Z [WARN] [ReportEventTool] Full project info unavailable, attempting lightweight fallback: UserError: Failed to detect or resolve JDK for the project at c:\Users\Atharv Mishra\Desktop\BlogSpace-java. Please ensure JDK 17 is installed and properly configured on the machine.
+2026-08-16T11:25:45.460Z [INFO] Maven project detected.
+2026-08-16T11:25:45.461Z [INFO] Project c:\Users\Atharv Mishra\Desktop\BlogSpace-java is a maven project, try to get java version from pom.xml
+2026-08-16T11:25:52.639Z [INFO] ---------------------prepare appmod-list-jdks----------------------
+2026-08-16T11:25:52.639Z [INFO] [Tool.prepareInvocation]({name: appmod-list-jdks, input: {
+  "sessionId": "20260816112545",
+  "additionalSearchPaths": [
+    "c:\\Program Files\\Java",
+    "c:\\Users\\Atharv Mishra\\AppData\\Local\\Programs\\Microsoft\\jdk",
+    "c:\\Users\\Atharv Mishra\\.jdks"
+  ]
+}}).
+2026-08-16T11:25:52.640Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-08-16T11:25:52.641Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "List jdks"
+}}).
+2026-08-16T11:25:52.642Z [INFO] ----------------------prepared appmod-list-jdks----------------------
+2026-08-16T11:25:53.625Z [INFO] ----------------------invoke appmod-list-jdks----------------------
+2026-08-16T11:25:53.626Z [INFO] [Tool.invoke]({name: appmod-list-jdks, modelId: auto, input: {
+  "sessionId": "20260816112545",
+  "additionalSearchPaths": [
+    "c:\\Program Files\\Java",
+    "c:\\Users\\Atharv Mishra\\AppData\\Local\\Programs\\Microsoft\\jdk",
+    "c:\\Users\\Atharv Mishra\\.jdks"
+  ]
+}}).
+2026-08-16T11:25:53.627Z [INFO] [Tool.invoke] do invoke.
+2026-08-16T11:25:53.651Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following jdks in your system:\n\n1. Java 25.0.1\n   📁 Path: C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.1.8-hotspot\\bin\n   🏷️ Source: PATH\n\n2. Java 25.0.2\n   📁 Path: C:\\Program Files\\Java\\jdk-25.0.2\\bin\n   🏷️ Source: others\n\nTotal: 2 JDK installation(s) found"
+}}).
+2026-08-16T11:25:53.651Z [INFO] ----------------------invoked appmod-list-jdks----------------------
+2026-08-16T11:25:53.690Z [INFO] ---------------------prepare appmod-list-mavens----------------------
+2026-08-16T11:25:53.691Z [INFO] [Tool.prepareInvocation]({name: appmod-list-mavens, input: {
+  "sessionId": "20260816112545",
+  "additionalSearchPaths": [
+    "c:\\Program Files\\Apache\\Maven",
+    "c:\\Users\\Atharv Mishra\\AppData\\Local\\Programs\\Maven",
+    "c:\\Users\\Atharv Mishra\\AppData\\Local\\Programs\\Microsoft\\"
+  ]
+}}).
+2026-08-16T11:25:53.692Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-08-16T11:25:53.693Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "List mavens"
+}}).
+2026-08-16T11:25:53.694Z [INFO] ----------------------prepared appmod-list-mavens----------------------
+2026-08-16T11:25:54.418Z [INFO] ----------------------invoke appmod-list-mavens----------------------
+2026-08-16T11:25:54.419Z [INFO] [Tool.invoke]({name: appmod-list-mavens, modelId: auto, input: {
+  "sessionId": "20260816112545",
+  "additionalSearchPaths": [
+    "c:\\Program Files\\Apache\\Maven",
+    "c:\\Users\\Atharv Mishra\\AppData\\Local\\Programs\\Maven",
+    "c:\\Users\\Atharv Mishra\\AppData\\Local\\Programs\\Microsoft\\"
+  ]
+}}).
+2026-08-16T11:25:54.420Z [INFO] [Tool.invoke] do invoke.
+2026-08-16T11:25:54.428Z [INFO] [Tool.invoke]({result: {
+  "message": "No Maven installations found."
+}}).
+2026-08-16T11:25:54.429Z [INFO] ----------------------invoked appmod-list-mavens----------------------
+2026-08-16T11:26:43.660Z [INFO] ---------------------prepare appmod-report-event----------------------
+2026-08-16T11:26:43.661Z [INFO] [Tool.prepareInvocation]({name: appmod-report-event, input: {
+  "sessionId": "20260816112545",
+  "projectPath": "c:\\Users\\Atharv Mishra\\Desktop\\BlogSpace-java",
+  "event": "planReviewed",
+  "phase": "plan",
+  "status": "succeeded",
+  "message": "Plan reviewed and ready for execution."
+}}).
+2026-08-16T11:26:43.661Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-08-16T11:26:43.662Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Report upgrade event"
+}}).
+2026-08-16T11:26:43.663Z [INFO] ----------------------prepared appmod-report-event----------------------
+2026-08-16T11:26:44.292Z [INFO] ----------------------invoke appmod-report-event----------------------
+2026-08-16T11:26:44.292Z [INFO] [Tool.invoke]({name: appmod-report-event, modelId: auto, input: {
+  "sessionId": "20260816112545",
+  "projectPath": "c:\\Users\\Atharv Mishra\\Desktop\\BlogSpace-java",
+  "event": "planReviewed",
+  "phase": "plan",
+  "status": "succeeded",
+  "message": "Plan reviewed and ready for execution."
+}}).
+2026-08-16T11:26:44.293Z [INFO] [Tool.invoke] do invoke.
+2026-08-16T11:26:44.294Z [INFO] [Tool.invoke]({result: {
+  "message": "Event 'planReviewed' reported!\nSession ID: 20260816112545,\nSession Dir: c:\\Users\\Atharv Mishra\\Desktop\\BlogSpace-java\\.github\\modernize\\java-upgrade\\20260816112545"
+}}).
+2026-08-16T11:26:44.295Z [INFO] ----------------------invoked appmod-report-event----------------------
+2026-08-16T11:26:51.355Z [INFO] ---------------------prepare appmod-report-event----------------------
+2026-08-16T11:26:51.355Z [INFO] [Tool.prepareInvocation]({name: appmod-report-event, input: {
+  "sessionId": "20260816112545",
+  "projectPath": "c:\\Users\\Atharv Mishra\\Desktop\\BlogSpace-java",
+  "event": "planExecutionStarted",
+  "phase": "execute",
+  "status": "succeeded"
+}}).
+2026-08-16T11:26:51.356Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-08-16T11:26:51.357Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Report upgrade event"
+}}).
+2026-08-16T11:26:51.357Z [INFO] ----------------------prepared appmod-report-event----------------------
+2026-08-16T11:26:52.184Z [INFO] ----------------------invoke appmod-report-event----------------------
+2026-08-16T11:26:52.184Z [INFO] [Tool.invoke]({name: appmod-report-event, modelId: auto, input: {
+  "sessionId": "20260816112545",
+  "projectPath": "c:\\Users\\Atharv Mishra\\Desktop\\BlogSpace-java",
+  "event": "planExecutionStarted",
+  "phase": "execute",
+  "status": "succeeded"
+}}).
+2026-08-16T11:26:52.185Z [INFO] [Tool.invoke] do invoke.
+2026-08-16T11:26:52.284Z [INFO] [Tool.invoke]({result: {
+  "message": "Event 'planExecutionStarted' reported!\nSession ID: 20260816112545,\nSession Dir: c:\\Users\\Atharv Mishra\\Desktop\\BlogSpace-java\\.github\\modernize\\java-upgrade\\20260816112545"
+}}).
+2026-08-16T11:26:52.285Z [INFO] ----------------------invoked appmod-report-event----------------------
