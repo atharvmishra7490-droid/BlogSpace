@@ -68,6 +68,8 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,
 <button class="post-btn" onclick="addBlog()">🚀 Publish Blog</button>
 </div>
 
+<!-- ALL BLOGS SECTION - VISIBLE TO EVERYONE -->
+<h2 style="font-family:'Poppins';margin-bottom:12px;">🌍 All Blogs — Live Feed (Everyone)</h2>
 <div id="list">Loading amazing blogs...</div>
 </div>
 
@@ -100,9 +102,6 @@ async function register(){
  let j=await r.json(); 
  if(j.error){showToast('❌ '+j.error); loadCaptcha(); return;}
  showToast('✅ Registered! Please Login now');
- toggleAuth();
- if(!isLogin) toggleAuth();
- // switch to login mode
  isLogin=true;
  document.getElementById('authTitle').innerText='🔐 Welcome Back';
  document.getElementById('mainAuthBtn').innerText='🚀 Login';
@@ -123,10 +122,18 @@ async function login(){
 
 function checkSession(){
  let u=JSON.parse(localStorage.getItem('user')||'null');
- if(!u){document.getElementById('authCard').classList.remove('hide'); document.getElementById('blogCard').classList.add('hide'); document.getElementById('topBar').classList.add('hide'); loadCaptcha(); return;}
- document.getElementById('authCard').classList.add('hide'); document.getElementById('blogCard').classList.remove('hide'); document.getElementById('topBar').classList.remove('hide');
- document.getElementById('welcome').innerText='👋 '+u.username+' ('+u.email+')';
- loadBlogs();
+ if(!u){
+   document.getElementById('authCard').classList.remove('hide'); 
+   document.getElementById('blogCard').classList.add('hide'); 
+   document.getElementById('topBar').classList.add('hide'); 
+   loadCaptcha(); 
+ } else {
+   document.getElementById('authCard').classList.add('hide'); 
+   document.getElementById('blogCard').classList.remove('hide'); 
+   document.getElementById('topBar').classList.remove('hide');
+   document.getElementById('welcome').innerText='👋 '+u.username+' ('+u.email+')';
+ }
+ loadBlogs(); // <-- FIXED: Now loads for everyone!
 }
 function logout(){localStorage.removeItem('user'); location.reload();}
 
