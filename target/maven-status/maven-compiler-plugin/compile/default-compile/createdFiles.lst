@@ -1,4 +1,10 @@
-com\BlogSpace\BlogSpaceApplication.class
+com\BlogSpace\AuthController.class
 com\BlogSpace\Blog.class
+com\BlogSpace\SecurityConfig.class
+com\BlogSpace\UserRepository.class
+com\BlogSpace\User.class
+com\BlogSpace\BlogSpaceApplication.class
+com\BlogSpace\EmailService.class
 com\BlogSpace\BlogController.class
+com\BlogSpace\CaptchaService.class
 com\BlogSpace\BlogRepository.class
