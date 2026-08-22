@@ -48,7 +48,7 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,
 <div id="authCard" class="card">
 <h2 id="authTitle">🔐 Create Account</h2>
 <input id="username" placeholder="👤 Username">
-<input id="email" placeholder="📧 Email (for verification)">
+<input id="email" placeholder="📧 Email">
 <input id="password" type="password" placeholder="🔑 Password">
 <div class="captchaBox">
  <span id="captchaQ">Loading...</span>
@@ -58,13 +58,6 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,
 <input id="captchaId" type="hidden">
 <button id="mainAuthBtn" class="post-btn" onclick="register()">✨ Register</button>
 <p style="text-align:center;margin-top:12px"><span class="link" onclick="toggleAuth()" id="toggleLink">Already have account? Login</span></p>
-
-<div id="verifyBox" class="hide" style="margin-top:18px;border-top:1px dashed #cbd5e1;padding-top:15px">
- <h2>✅ Verify Email</h2>
- <p style="font-size:13px;color:#64748b">Code printed in backend console (or email). Enter here:</p>
- <input id="vcode" placeholder="Verification Code">
- <button class="post-btn" style="background:#0f172a" onclick="verify()">Verify & Continue</button>
-</div>
 </div>
 
 <!-- BLOG CARD -->
@@ -102,18 +95,27 @@ function toggleAuth(){
 async function register(){
  let body={username:username.value.trim(),email:email.value.trim(),password:password.value,captchaId:captchaId.value,captchaAnswer:captchaAns.value};
  if(!body.username||!body.email||!body.password){showToast('⚠️ Fill all fields');return;}
+ if(!body.captchaAnswer){showToast('⚠️ Solve captcha');return;}
  let r=await fetch(API+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
  let j=await r.json(); 
  if(j.error){showToast('❌ '+j.error); loadCaptcha(); return;}
- showToast('✅ '+j.message); document.getElementById('verifyBox').classList.remove('hide');
-}
-async function verify(){
- let r=await fetch(API+'/auth/verify?code='+vcode.value); let j=await r.json();
- showToast(j.message? '✅ Verified! Login now' : '❌ '+j.error);
- if(j.message){toggleAuth(); isLogin=true; document.getElementById('authTitle').innerText='🔐 Welcome Back'; document.getElementById('mainAuthBtn').innerText='🚀 Login'; document.getElementById('mainAuthBtn').setAttribute('onclick','login()'); document.getElementById('verifyBox').classList.add('hide');}
+ showToast('✅ Registered! Please Login now');
+ toggleAuth();
+ if(!isLogin) toggleAuth();
+ // switch to login mode
+ isLogin=true;
+ document.getElementById('authTitle').innerText='🔐 Welcome Back';
+ document.getElementById('mainAuthBtn').innerText='🚀 Login';
+ document.getElementById('mainAuthBtn').setAttribute('onclick','login()');
+ document.getElementById('toggleLink').innerText='New here? Create account';
+ loadCaptcha();
+ document.getElementById('password').value='';
+ document.getElementById('captchaAns').value='';
 }
 async function login(){
  let body={email:email.value.trim(),password:password.value,captchaId:captchaId.value,captchaAnswer:captchaAns.value};
+ if(!body.email||!body.password){showToast('⚠️ Fill email & password');return;}
+ if(!body.captchaAnswer){showToast('⚠️ Solve captcha');return;}
  let r=await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
  let j=await r.json(); if(j.error){showToast('❌ '+j.error); loadCaptcha(); return;}
  localStorage.setItem('user',JSON.stringify(j)); showToast('✅ Welcome '+j.username); checkSession();
