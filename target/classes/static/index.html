@@ -109,6 +109,29 @@ function filterBlogs(){let q=search.value.toLowerCase();render(allBlogs.filter(b
 async function addBlog(){let u=JSON.parse(localStorage.getItem('user'));if(!title.value.trim()||!content.value.trim())return alert('Fill title & content');let res=await fetch('/api/blogs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title.value,content:content.value,ownerId:u.id,author:u.username})});if(res.ok){title.value='';content.value='';loadBlogs();}}
 async function deleteBlog(id){let u=JSON.parse(localStorage.getItem('user'));if(!confirm('Delete this blog?'))return;await fetch(`/api/blogs/${id}?ownerId=${u.id}`,{method:'DELETE'});loadBlogs();}
 async function deleteBlogAdmin(id){if(!confirm('Admin delete?'))return;await fetch(`/api/blogs/admin/${id}?secret=ankur123`,{method:'DELETE'});loadBlogs();}
-let c=0;logoTitle.addEventListener('click',()=>{c++;if(c===5){let s=prompt('Admin secret:');if(s==='ankur123'){localStorage.setItem('adminMode','true');alert('Admin ON');location.reload();}c=0;}setTimeout(()=>c=0,3000);});
+
+// ===== FIXED: 5 CLICK TOGGLE ON/OFF =====
+let c=0;
+logoTitle.addEventListener('click',()=>{
+  c++;
+  if(c===5){
+    let isAdmin = localStorage.getItem('adminMode')=='true';
+    if(isAdmin){
+      localStorage.removeItem('adminMode');
+      alert('Admin OFF 🔒');
+      location.reload();
+    } else {
+      let s=prompt('Admin secret:');
+      if(s==='ankur123'){
+        localStorage.setItem('adminMode','true');
+        alert('Admin ON 🔓');
+        location.reload();
+      }
+    }
+    c=0;
+  }
+  setTimeout(()=>c=0,3000);
+});
+
 loadCaptcha();checkState();loadBlogs();validateAuth();
 </script></body></html>
