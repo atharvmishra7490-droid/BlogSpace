@@ -2,6 +2,7 @@ package com.BlogSpace;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -14,24 +15,33 @@ public class BlogController {
 
     @GetMapping public List<Blog> all(){ return repo.findAll(); }
 
-    @PostMapping public Blog create(@RequestBody Blog blog){ return repo.save(blog); }
+    @PostMapping
+    public Blog create(@RequestBody Blog blog){
+        Blog newBlog = new Blog();
+        newBlog.setTitle(blog.getTitle());
+        newBlog.setContent(blog.getContent());
+        newBlog.setOwnerId(blog.getOwnerId());
+        newBlog.setAuthor(blog.getAuthor()); // FIX: name will show now
+        newBlog.setCreatedAt(LocalDateTime.now());
+        return repo.save(newBlog);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id, @RequestParam Long ownerId){
         var opt = repo.findById(id);
         if(opt.isEmpty()) return ResponseEntity.status(404).body(Map.of("error","Not found"));
-        var b = opt.get();
-        if(!b.getOwnerId().equals(ownerId)){
-            return ResponseEntity.status(403).body(Map.of("error","You can only delete your own blog"));
+        if(!opt.get().getOwnerId().equals(ownerId)){
+            return ResponseEntity.status(403).body(Map.of("error","Not your blog"));
         }
         repo.deleteById(id);
         return ResponseEntity.ok(Map.of("message","Deleted"));
     }
 
+    // HIDDEN ADMIN - only you with secret can delete all
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<?> adminDelete(@PathVariable Long id, @RequestParam String secret){
         if(!"ankur123".equals(secret)) return ResponseEntity.status(403).body("Wrong secret");
         repo.deleteById(id);
-        return ResponseEntity.ok("Admin deleted "+id);
+        return ResponseEntity.ok("Admin deleted");
     }
 }
