@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class BlogSpaceApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(BlogSpaceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BlogSpaceApplication.class, args);
+    }
 }

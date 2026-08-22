@@ -1,85 +1,50 @@
 package com.BlogSpace;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
 public class AuthController {
-
-    @Autowired private UserRepository userRepo;
-    @Autowired private CaptchaService captchaService;
+    private final UserRepository userRepo;
+    public AuthController(UserRepository r){this.userRepo=r;}
+    private Map<String, String> captchas = new ConcurrentHashMap<>();
 
     @GetMapping("/captcha")
-    public Map<String, String> captcha() {
-        return captchaService.generate();
+    public Map<String,String> captcha(){
+        int a = (int)(Math.random()*20+1); int b = (int)(Math.random()*20+1);
+        String id = UUID.randomUUID().toString();
+        captchas.put(id, String.valueOf(a+b));
+        return Map.of("captchaId", id, "question", a+" + "+b+" = ?");
     }
 
     @PostMapping("/register")
-    public Map<String, String> register(@RequestBody Map<String, String> body) {
-        String username = body.get("username");
-        String email = body.get("email");
-        String password = body.get("password");
-        String captchaId = body.get("captchaId");
-        String captchaAnswer = body.get("captchaAnswer");
-
-        Map<String, String> res = new HashMap<>();
-        
-        if (!captchaService.validate(captchaId, captchaAnswer)) {
-            res.put("error", "Invalid captcha");
-            return res;
-        }
-        if (username == null || email == null || password == null || username.isBlank() || email.isBlank() || password.isBlank()) {
-            res.put("error", "Fill all fields");
-            return res;
-        }
-        if (userRepo.findByEmail(email).isPresent()) {
-            res.put("error", "Email already exists");
-            return res;
-        }
-        if (userRepo.findByUsername(username).isPresent()) {
-            res.put("error", "Username already taken");
-            return res;
-        }
-
+    public ResponseEntity<?> register(@RequestBody Map<String,String> body){
+        String capId = body.get("captchaId"); String ans = body.get("captchaAnswer");
+        if(!captchas.containsKey(capId) || !captchas.get(capId).equals(ans))
+            return ResponseEntity.badRequest().body(Map.of("error","Wrong captcha"));
+        captchas.remove(capId);
+        if(userRepo.findByEmail(body.get("email")).isPresent())
+            return ResponseEntity.badRequest().body(Map.of("error","Email already exists"));
         User u = new User();
-        u.setUsername(username);
-        u.setEmail(email);
-        u.setPassword(password);
-        u.setVerified(true);
+        u.setUsername(body.get("username")); u.setEmail(body.get("email")); u.setPassword(body.get("password"));
         userRepo.save(u);
-
-        res.put("message", "Registered successfully");
-        return res;
+        return ResponseEntity.ok(Map.of("message","Registered"));
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String password = body.get("password");
-        String captchaId = body.get("captchaId");
-        String captchaAnswer = body.get("captchaAnswer");
-
-        Map<String, Object> res = new HashMap<>();
-
-        if (!captchaService.validate(captchaId, captchaAnswer)) {
-            res.put("error", "Invalid captcha");
-            return res;
-        }
-
-        Optional<User> opt = userRepo.findByEmail(email);
-        if (opt.isEmpty() || !opt.get().getPassword().equals(password)) {
-            res.put("error", "Invalid email or password");
-            return res;
-        }
-
-        User u = opt.get();
-        res.put("id", u.getId());
-        res.put("username", u.getUsername());
-        res.put("email", u.getEmail());
-        res.put("message", "Login success");
-        return res;
+    public ResponseEntity<?> login(@RequestBody Map<String,String> body){
+        String capId = body.get("captchaId"); String ans = body.get("captchaAnswer");
+        if(!captchas.containsKey(capId) || !captchas.get(capId).equals(ans))
+            return ResponseEntity.badRequest().body(Map.of("error","Wrong captcha"));
+        captchas.remove(capId);
+        var opt = userRepo.findByEmail(body.get("email"));
+        if(opt.isEmpty() || !opt.get().getPassword().equals(body.get("password")))
+            return ResponseEntity.status(401).body(Map.of("error","Invalid email or password"));
+        var u = opt.get();
+        return ResponseEntity.ok(Map.of("id", u.getId(),"username", u.getUsername(),"email", u.getEmail()));
     }
 }
