@@ -1,98 +1,84 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>BlogSpace</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BlogSpace — Share Your Story</title>
 <style>
-body{font-family:Arial;padding:20px;max-width:800px;margin:auto}
-.card{border:1px solid #ddd;padding:12px;margin:10px 0;border-radius:8px}
-button{padding:6px 12px;margin:4px;cursor:pointer}
-input,textarea{width:100%;padding:8px;margin:5px 0}
-#createBox{display:none}
-</style></head>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+*{box-sizing:border-box;font-family:Inter,sans-serif}
+body{margin:0;background:radial-gradient(1200px 600px at 10% -10%,#6366f1 0%,transparent 60%),radial-gradient(1000px 500px at 90% 0%,#22d3ee 0%,transparent 50%),#0b1020;color:#e2e8f0;min-height:100vh}
+.navbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 28px;background:rgba(15,23,42,0.6);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08)}
+.logo{font-weight:800;font-size:22px;letter-spacing:.5px;cursor:pointer;user-select:none}
+.logo span{background:linear-gradient(90deg,#a5b4fc,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.container{max-width:1050px;margin:auto;padding:24px}
+.hero{text-align:center;padding:30px 10px 10px}
+.hero h2{font-size:38px;margin:6px 0;background:linear-gradient(90deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-top:18px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.glass{background:rgba(30,41,59,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(0,0,0,0.25)}
+input,textarea{width:100%;background:rgba(15,23,42,0.9);border:1px solid #334155;color:#fff;padding:12px 14px;border-radius:12px;margin:7px 0;outline:none}
+input:focus,textarea:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.25)}
+.btn{border:none;padding:10px 16px;border-radius:12px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-primary{background:linear-gradient(90deg,#6366f1,#22d3ee);color:white}
+.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.btn-ghost{background:#1e293b;color:#cbd5e1;border:1px solid #334155}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);padding:6px 10px;border-radius:999px;font-size:12px}
+.blog-card{transition:.2s}
+.blog-card:hover{transform:translateY(-3px);border-color:#6366f1}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.small{color:#94a3b8;font-size:13px}
+.hr{height:1px;background:rgba(255,255,255,0.08);margin:14px 0}
+#blogs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){#blogs{grid-template-columns:1fr}}
+</style>
+</head>
 <body>
-<h1 id="logoTitle">BlogSpace</h1>
-<div id="auth">
-<h3>Login / Register</h3>
-<input id="username" placeholder="username (for register)">
-<input id="email" placeholder="email">
-<input id="password" type="password" placeholder="password">
-<div id="captchaBox"></div>
-<input id="captchaAns" placeholder="captcha answer">
-<button onclick="loadCaptcha()">Refresh Captcha</button>
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
-<button onclick="logout()">Logout</button>
-<p id="userInfo"></p>
+<div class="navbar"><div class="logo" id="logoTitle">BlogSpace <span>✨</span></div><div><span class="badge" id="userInfo">Guest</span> <button class="btn btn-ghost" onclick="logout()">Logout</button></div></div>
+
+<div class="container">
+<div class="hero"><h2>Share your story with the world</h2><p class="small">Modern • Fast • Secure • Built for creators</p></div>
+
+<div class="grid">
+<div class="glass">
+<h3>🔐 Login / Register</h3>
+<input id="username" placeholder="Username (for register)">
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<div class="glass" style="padding:10px;margin:8px 0;background:rgba(0,0,0,0.3)"><b id="captchaBox">Loading captcha...</b></div>
+<input id="captchaAns" placeholder="Captcha answer">
+<div class="row"><button class="btn btn-ghost" onclick="loadCaptcha()">↻ Refresh</button><button class="btn btn-primary" onclick="register()">Register</button><button class="btn btn-primary" onclick="login()">Login</button></div>
+<div class="hr"></div>
+<div id="createBox" style="display:none">
+<h3>✍️ Create Blog</h3>
+<input id="title" placeholder="Blog title — make it catchy">
+<textarea id="content" rows="6" placeholder="Write your amazing story here..."></textarea>
+<button class="btn btn-primary" style="width:100%" onclick="addBlog()">🚀 Publish Blog</button>
+</div>
 </div>
 
-<div id="createBox">
-<h3>Create Blog</h3>
-<input id="title" placeholder="Title">
-<textarea id="content" placeholder="Content"></textarea>
-<button onclick="addBlog()">Post Blog</button>
-</div>
-
-<h2>All Blogs</h2>
+<div>
+<div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h2 style="margin:0">All Blogs 🔥</h2><input id="search" placeholder="Search blogs..." style="max-width:220px" oninput="filterBlogs()"></div>
 <div id="blogs"></div>
+</div>
+</div>
+</div>
 
 <script>
-let captchaId=null;
-async function loadCaptcha(){
- let r=await fetch('/api/auth/captcha'); let d=await r.json();
- captchaId=d.captchaId; document.getElementById('captchaBox').innerText=d.question;
-}
-async function register(){
- let r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},
- body:JSON.stringify({username:username.value,email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});
- alert((await r.json()).message||(await r.text())); loadCaptcha();
-}
-async function login(){
- let r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},
- body:JSON.stringify({email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});
- let d=await r.json();
- if(r.ok){localStorage.setItem('user',JSON.stringify(d)); showUser(); loadBlogs();}
- else alert(d.error); loadCaptcha();
-}
-function logout(){localStorage.removeItem('user'); localStorage.removeItem('adminMode'); location.reload();}
-function showUser(){
- let u=JSON.parse(localStorage.getItem('user')||'null');
- if(u){userInfo.innerText='Logged in as '+u.username; createBox.style.display='block';} 
-}
-async function loadBlogs(){
- let r=await fetch('/api/blogs'); let list=await r.json();
- let u=JSON.parse(localStorage.getItem('user')||'null'); let uid=u?u.id:null;
- let isAdmin=localStorage.getItem('adminMode')=='true';
- blogs.innerHTML=list.reverse().map(b=>{
-   let canDelete = uid && b.ownerId==uid;
-   let btn = canDelete?`<button onclick="deleteBlog(${b.id})">Delete</button>`:'';
-   if(isAdmin) btn=`<button onclick="deleteBlogAdmin(${b.id})" style="background:red;color:white">DELETE (Admin)</button>`;
-   return `<div class="card"><h3>${b.title}</h3><p>${b.content}</p><small>👤 ${b.author||'Anonymous'}</small><br>${btn}</div>`;
- }).join('');
-}
-async function addBlog(){
- let u=JSON.parse(localStorage.getItem('user'));
- let res=await fetch('/api/blogs',{method:'POST',headers:{'Content-Type':'application/json'},
- body:JSON.stringify({title:title.value,content:content.value,ownerId:u.id,author:u.username})});
- if(res.ok){title.value='';content.value='';loadBlogs();}
-}
-async function deleteBlog(id){
- let u=JSON.parse(localStorage.getItem('user'));
- await fetch(`/api/blogs/${id}?ownerId=${u.id}`,{method:'DELETE'}); loadBlogs();
-}
-async function deleteBlogAdmin(id){
- let s='ankur123';
- await fetch(`/api/blogs/admin/${id}?secret=${s}`,{method:'DELETE'}); loadBlogs();
-}
-
-// SECRET ADMIN - 5 clicks on BlogSpace title
-let clicks=0;
-document.getElementById('logoTitle').addEventListener('click',()=>{
- clicks++; if(clicks===5){
-   let s=prompt('Admin secret:');
-   if(s==='ankur123'){localStorage.setItem('adminMode','true'); alert('Admin mode ON'); location.reload();}
-   clicks=0;
- }
- setTimeout(()=>clicks=0,3000);
-});
-
-loadCaptcha(); showUser(); loadBlogs();
+let captchaId=null, allBlogs=[];
+async function loadCaptcha(){let r=await fetch('/api/auth/captcha');let d=await r.json();captchaId=d.captchaId;document.getElementById('captchaBox').innerText=d.question;}
+async function register(){let r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:username.value,email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});let j=await r.json();alert(j.message||j.error);loadCaptcha();}
+async function login(){let r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});let d=await r.json();if(r.ok){localStorage.setItem('user',JSON.stringify(d));showUser();loadBlogs();}else alert(d.error);loadCaptcha();}
+function logout(){localStorage.removeItem('user');localStorage.removeItem('adminMode');location.reload();}
+function showUser(){let u=JSON.parse(localStorage.getItem('user')||'null');if(u){document.getElementById('userInfo').innerText='👤 '+u.username;document.getElementById('createBox').style.display='block';}}
+async function loadBlogs(){let r=await fetch('/api/blogs');allBlogs=(await r.json()).slice().reverse();render(allBlogs);}
+function render(list){let u=JSON.parse(localStorage.getItem('user')||'null');let uid=u?u.id:null;let isAdmin=localStorage.getItem('adminMode')=='true';document.getElementById('blogs').innerHTML=list.map(b=>{let btn='';if(uid&&b.ownerId==uid)btn=`<button class="btn btn-ghost" onclick="deleteBlog(${b.id})">Delete</button>`;if(isAdmin)btn=`<button class="btn" style="background:#ef4444;color:white" onclick="deleteBlogAdmin(${b.id})">ADMIN DELETE</button>`;return `<div class="glass blog-card"><h3 style="margin:4px 0">${b.title}</h3><p class="small" style="line-height:1.6">${b.content}</p><div class="hr"></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="badge">👤 ${b.author||'Anonymous'} • ${b.createdAt?new Date(b.createdAt).toLocaleDateString():''}</span>${btn}</div></div>`}).join('')||'<p class="small">No blogs yet — be first to post!</p>';}
+function filterBlogs(){let q=document.getElementById('search').value.toLowerCase();render(allBlogs.filter(b=>b.title.toLowerCase().includes(q)||b.content.toLowerCase().includes(q)));}
+async function addBlog(){let u=JSON.parse(localStorage.getItem('user'));if(!u){alert('Login first');return;}let res=await fetch('/api/blogs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title.value,content:content.value,ownerId:u.id,author:u.username})});if(res.ok){title.value='';content.value='';loadBlogs();}}
+async function deleteBlog(id){let u=JSON.parse(localStorage.getItem('user'));await fetch(`/api/blogs/${id}?ownerId=${u.id}`,{method:'DELETE'});loadBlogs();}
+async function deleteBlogAdmin(id){await fetch(`/api/blogs/admin/${id}?secret=ankur123`,{method:'DELETE'});loadBlogs();}
+// HIDDEN ADMIN - 5 clicks on logo
+let clicks=0;document.getElementById('logoTitle').addEventListener('click',()=>{clicks++;if(clicks===5){let s=prompt('Admin secret:');if(s==='ankur123'){localStorage.setItem('adminMode','true');alert('🔥 Admin mode ON — you can delete all');location.reload();}clicks=0;}setTimeout(()=>clicks=0,3000);});
+loadCaptcha();showUser();loadBlogs();
 </script>
-</body></html>
+</body>
+</html>
