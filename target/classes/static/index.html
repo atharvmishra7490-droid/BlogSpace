@@ -1,84 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BlogSpace — Share Your Story</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-*{box-sizing:border-box;font-family:Inter,sans-serif}
-body{margin:0;background:radial-gradient(1200px 600px at 10% -10%,#6366f1 0%,transparent 60%),radial-gradient(1000px 500px at 90% 0%,#22d3ee 0%,transparent 50%),#0b1020;color:#e2e8f0;min-height:100vh}
-.navbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 28px;background:rgba(15,23,42,0.6);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08)}
-.logo{font-weight:800;font-size:22px;letter-spacing:.5px;cursor:pointer;user-select:none}
-.logo span{background:linear-gradient(90deg,#a5b4fc,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.container{max-width:1050px;margin:auto;padding:24px}
-.hero{text-align:center;padding:30px 10px 10px}
-.hero h2{font-size:38px;margin:6px 0;background:linear-gradient(90deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-top:18px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
-.glass{background:rgba(30,41,59,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(0,0,0,0.25)}
-input,textarea{width:100%;background:rgba(15,23,42,0.9);border:1px solid #334155;color:#fff;padding:12px 14px;border-radius:12px;margin:7px 0;outline:none}
-input:focus,textarea:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.25)}
-.btn{border:none;padding:10px 16px;border-radius:12px;font-weight:600;cursor:pointer;transition:.2s}
-.btn-primary{background:linear-gradient(90deg,#6366f1,#22d3ee);color:white}
-.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.1)}
-.btn-ghost{background:#1e293b;color:#cbd5e1;border:1px solid #334155}
-.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);padding:6px 10px;border-radius:999px;font-size:12px}
-.blog-card{transition:.2s}
-.blog-card:hover{transform:translateY(-3px);border-color:#6366f1}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.small{color:#94a3b8;font-size:13px}
-.hr{height:1px;background:rgba(255,255,255,0.08);margin:14px 0}
-#blogs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:700px){#blogs{grid-template-columns:1fr}}
-</style>
-</head>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,sans-serif;background:#070d26;color:#e2e8f0;min-height:100vh}
+.nav{padding:18px 28px;display:flex;justify-content:space-between;align-items:center;background:rgba(7,13,38,0.8);backdrop-filter:blur(12px);border-bottom:1px solid #1e2a5a;position:sticky;top:0;z-index:10}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.5px;cursor:pointer}
+.logo span{color:#60a5fa}
+.panel{background:linear-gradient(180deg,#173071 0%,#12265f 100%);border:1px solid #284393;border-radius:18px;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+input,textarea{width:100%;background:#0a193c;border:1px solid #2a3e81;border-radius:10px;padding:12px 14px;color:white;margin:7px 0;outline:none;font-size:14px}
+input::placeholder,textarea::placeholder{color:#7a8ac0}
+input:focus,textarea:focus{border-color:#4f7cff;box-shadow:0 0 0 3px rgba(79,124,255,.25)}
+.btn{border:none;border-radius:10px;padding:9px 16px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-b{background:#3b82f6;color:white} .btn-b:hover{background:#2563eb}
+.btn-d{background:#1e2f6b;color:#a8b9e6;border:1px solid #2a3e81}
+.btn-log{background:#0f1c45;color:#cbd5e1;border:1px solid #2a3e81}
+.captcha{background:#0a193c;border:1px solid #2a3e81;border-radius:10px;padding:10px;text-align:left;color:#93c5fd;font-weight:700;margin:7px 0}
+
+/* AUTH VIEW */
+#authView{max-width:440px;margin:60px auto;padding:0 20px}
+#authView .panel{padding:28px}
+
+/* APP VIEW */
+#appView{display:none;max-width:1280px;margin:auto;padding:24px;display:none;grid-template-columns:380px 1fr;gap:26px;align-items:start}
+@media(max-width:900px){#appView{grid-template-columns:1fr}}
+.blogCard{background:rgba(19,34,95,0.7);border:1px solid #233575;border-radius:16px;padding:20px;margin-bottom:16px;backdrop-filter:blur(10px)}
+.blogCard h3{margin:0 0 8px;font-size:18px;color:white}
+.blogCard p{color:#a8b9e6;line-height:1.6;font-size:14px;margin:0}
+.topRow{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.search{background:#0a193c;border:1px solid #2a3e81;border-radius:10px;padding:10px 14px;color:white;min-width:220px}
+.badge{background:#0a193c;border:1px solid #2a3e81;padding:5px 10px;border-radius:999px;font-size:12px;color:#93b1ff}
+</style></head>
 <body>
-<div class="navbar"><div class="logo" id="logoTitle">BlogSpace <span>✨</span></div><div><span class="badge" id="userInfo">Guest</span> <button class="btn btn-ghost" onclick="logout()">Logout</button></div></div>
 
-<div class="container">
-<div class="hero"><h2>Share your story with the world</h2><p class="small">Modern • Fast • Secure • Built for creators</p></div>
-
-<div class="grid">
-<div class="glass">
-<h3>🔐 Login / Register</h3>
-<input id="username" placeholder="Username (for register)">
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<div class="glass" style="padding:10px;margin:8px 0;background:rgba(0,0,0,0.3)"><b id="captchaBox">Loading captcha...</b></div>
-<input id="captchaAns" placeholder="Captcha answer">
-<div class="row"><button class="btn btn-ghost" onclick="loadCaptcha()">↻ Refresh</button><button class="btn btn-primary" onclick="register()">Register</button><button class="btn btn-primary" onclick="login()">Login</button></div>
-<div class="hr"></div>
-<div id="createBox" style="display:none">
-<h3>✍️ Create Blog</h3>
-<input id="title" placeholder="Blog title — make it catchy">
-<textarea id="content" rows="6" placeholder="Write your amazing story here..."></textarea>
-<button class="btn btn-primary" style="width:100%" onclick="addBlog()">🚀 Publish Blog</button>
+<div class="nav">
+<div class="logo" id="logoTitle">Blog<span>Space</span> ✨</div>
+<div style="display:flex;gap:10px;align-items:center"><span id="userInfo" class="badge">Guest</span><button class="btn btn-log" onclick="logout()">Logout</button></div>
 </div>
+
+<!-- BEFORE LOGIN - SAME DARK DESIGN CENTERED -->
+<div id="authView">
+<div class="panel">
+<h3 style="margin:0 0 14px">🔒 Login / Register</h3>
+<input id="username" placeholder="Username">
+<input id="email" placeholder="Email address">
+<input id="password" type="password" placeholder="Password">
+<div class="captcha" id="captchaBox">Loading...</div>
+<input id="captchaAns" placeholder="Captcha answer">
+<div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-d" onclick="loadCaptcha()">↻ Refresh</button><button class="btn btn-b" onclick="register()">Register</button><button class="btn btn-b" style="background:#38bdf8;color:#00122f" onclick="login()">Login</button></div>
+<p style="font-size:12px;color:#7a8ac0;margin-top:14px;text-align:center">Login to unlock all blogs & publish</p>
+</div>
+</div>
+
+<!-- AFTER LOGIN - PAGE CHANGES, LOGIN GONE -->
+<div id="appView">
+<div class="panel" style="position:sticky;top:88px">
+<h3 style="margin:0 0 14px">✍️ Create Blog</h3>
+<input id="title" placeholder="Blog title — make it catchy">
+<textarea id="content" rows="9" placeholder="Write your amazing story here..."></textarea>
+<button class="btn btn-b" style="width:100%;padding:13px;background:#3b82f6;margin-top:8px;font-size:15px" onclick="addBlog()">Publish Blog 🚀</button>
+<div style="margin-top:18px;padding-top:14px;border-top:1px solid #233575;font-size:12px;color:#7a8ac0">Logged in as <b id="meName" style="color:#93c5fd"></b></div>
 </div>
 
 <div>
-<div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h2 style="margin:0">All Blogs 🔥</h2><input id="search" placeholder="Search blogs..." style="max-width:220px" oninput="filterBlogs()"></div>
-<div id="blogs"></div>
-</div>
+<div class="topRow"><h2 style="margin:0">All Blogs 🔥</h2><input id="search" class="search" placeholder="Search blogs..." oninput="filterBlogs()"></div>
+<div id="blogs"><p style="color:#7a8ac0">No blogs yet — be first to post!</p></div>
 </div>
 </div>
 
 <script>
-let captchaId=null, allBlogs=[];
-async function loadCaptcha(){let r=await fetch('/api/auth/captcha');let d=await r.json();captchaId=d.captchaId;document.getElementById('captchaBox').innerText=d.question;}
+let captchaId=null,allBlogs=[];
+async function loadCaptcha(){let r=await fetch('/api/auth/captcha');let d=await r.json();captchaId=d.captchaId;captchaBox.innerText=d.question;}
 async function register(){let r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:username.value,email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});let j=await r.json();alert(j.message||j.error);loadCaptcha();}
-async function login(){let r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});let d=await r.json();if(r.ok){localStorage.setItem('user',JSON.stringify(d));showUser();loadBlogs();}else alert(d.error);loadCaptcha();}
+async function login(){let r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});let d=await r.json();if(r.ok){localStorage.setItem('user',JSON.stringify(d));checkState();loadBlogs();}else alert(d.error);loadCaptcha();}
 function logout(){localStorage.removeItem('user');localStorage.removeItem('adminMode');location.reload();}
-function showUser(){let u=JSON.parse(localStorage.getItem('user')||'null');if(u){document.getElementById('userInfo').innerText='👤 '+u.username;document.getElementById('createBox').style.display='block';}}
+function checkState(){
+let u=JSON.parse(localStorage.getItem('user')||'null');
+if(u){
+document.getElementById('authView').style.display='none';
+document.getElementById('appView').style.display='grid';
+userInfo.innerText='👤 '+u.username;
+meName.innerText=u.username;
+}else{
+document.getElementById('authView').style.display='block';
+document.getElementById('appView').style.display='none';
+userInfo.innerText='Guest';
+}
+}
 async function loadBlogs(){let r=await fetch('/api/blogs');allBlogs=(await r.json()).slice().reverse();render(allBlogs);}
-function render(list){let u=JSON.parse(localStorage.getItem('user')||'null');let uid=u?u.id:null;let isAdmin=localStorage.getItem('adminMode')=='true';document.getElementById('blogs').innerHTML=list.map(b=>{let btn='';if(uid&&b.ownerId==uid)btn=`<button class="btn btn-ghost" onclick="deleteBlog(${b.id})">Delete</button>`;if(isAdmin)btn=`<button class="btn" style="background:#ef4444;color:white" onclick="deleteBlogAdmin(${b.id})">ADMIN DELETE</button>`;return `<div class="glass blog-card"><h3 style="margin:4px 0">${b.title}</h3><p class="small" style="line-height:1.6">${b.content}</p><div class="hr"></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="badge">👤 ${b.author||'Anonymous'} • ${b.createdAt?new Date(b.createdAt).toLocaleDateString():''}</span>${btn}</div></div>`}).join('')||'<p class="small">No blogs yet — be first to post!</p>';}
-function filterBlogs(){let q=document.getElementById('search').value.toLowerCase();render(allBlogs.filter(b=>b.title.toLowerCase().includes(q)||b.content.toLowerCase().includes(q)));}
-async function addBlog(){let u=JSON.parse(localStorage.getItem('user'));if(!u){alert('Login first');return;}let res=await fetch('/api/blogs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title.value,content:content.value,ownerId:u.id,author:u.username})});if(res.ok){title.value='';content.value='';loadBlogs();}}
+function render(list){
+let u=JSON.parse(localStorage.getItem('user')||'null');let uid=u?u.id:null;let isAdmin=localStorage.getItem('adminMode')=='true';
+blogs.innerHTML=list.map(b=>{
+let btn='';if(uid&&b.ownerId==uid)btn=`<button class="btn btn-d" style="font-size:12px;margin-top:10px" onclick="deleteBlog(${b.id})">Delete</button>`;
+if(isAdmin)btn=`<button class="btn" style="background:#ef4444;color:white;font-size:12px;margin-top:10px" onclick="deleteBlogAdmin(${b.id})">ADMIN DELETE</button>`;
+return `<div class="blogCard"><h3>${b.title}</h3><p>${b.content}</p><div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><span class="badge">👤 ${b.author||'Anonymous'}</span>${btn}</div></div>`;
+}).join('')||'<div class="blogCard" style="text-align:center;color:#7a8ac0">No blogs yet — be first to post!</div>';
+}
+function filterBlogs(){let q=search.value.toLowerCase();render(allBlogs.filter(b=>b.title.toLowerCase().includes(q)||b.content.toLowerCase().includes(q)));}
+async function addBlog(){let u=JSON.parse(localStorage.getItem('user'));if(!u)return alert('Login first');if(!title.value||!content.value)return alert('Fill title+content');let res=await fetch('/api/blogs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title.value,content:content.value,ownerId:u.id,author:u.username})});if(res.ok){title.value='';content.value='';loadBlogs();}}
 async function deleteBlog(id){let u=JSON.parse(localStorage.getItem('user'));await fetch(`/api/blogs/${id}?ownerId=${u.id}`,{method:'DELETE'});loadBlogs();}
 async function deleteBlogAdmin(id){await fetch(`/api/blogs/admin/${id}?secret=ankur123`,{method:'DELETE'});loadBlogs();}
-// HIDDEN ADMIN - 5 clicks on logo
-let clicks=0;document.getElementById('logoTitle').addEventListener('click',()=>{clicks++;if(clicks===5){let s=prompt('Admin secret:');if(s==='ankur123'){localStorage.setItem('adminMode','true');alert('🔥 Admin mode ON — you can delete all');location.reload();}clicks=0;}setTimeout(()=>clicks=0,3000);});
-loadCaptcha();showUser();loadBlogs();
+let clicks=0;logoTitle.addEventListener('click',()=>{clicks++;if(clicks===5){let s=prompt('Admin secret:');if(s==='ankur123'){localStorage.setItem('adminMode','true');alert('Admin ON');location.reload();}clicks=0;}setTimeout(()=>clicks=0,3000);});
+loadCaptcha();checkState();loadBlogs();
 </script>
-</body>
-</html>
+</body></html>
