@@ -1,4 +1,4 @@
-papackage com.BlogSpace;
+package com.BlogSpace;
 import org.springframework.stereotype.Service;
 import java.util.*; 
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,56 +1,85 @@
 package com.BlogSpace;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
-@RestController @RequestMapping("/api/auth") @CrossOrigin
+@RestController
+@RequestMapping("/api/auth")
+@CrossOrigin
 public class AuthController {
-  @Autowired private UserRepository userRepo;
-  @Autowired private CaptchaService captchaService;
-  private BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
 
-  @GetMapping("/captcha") 
-  public Map<String,String> getCaptcha(){
-    return captchaService.generate();
-  }
+    @Autowired private UserRepository userRepo;
+    @Autowired private CaptchaService captchaService;
 
-  @PostMapping("/register")
-  public Object register(@RequestBody Map<String,String> body){
-    // Captcha check
-    if(!captchaService.validate(body.get("captchaId"),body.get("captchaAnswer"))) 
-      return Map.of("error","Wrong Captcha - answer should be sum, ex 4+5=9");
-    
-    if(userRepo.findByEmail(body.get("email")).isPresent()) 
-      return Map.of("error","Email already used");
-    
-    User u=new User(); 
-    u.setUsername(body.get("username")); 
-    u.setEmail(body.get("email"));
-    u.setPassword(encoder.encode(body.get("password")));
-    u.setVerified(true); // AUTO VERIFIED - no email needed
-    u.setVerificationCode(null); 
-    userRepo.save(u);
-    
-    return Map.of("message","Registered Successfully! Please Login","id",u.getId());
-  }
+    @GetMapping("/captcha")
+    public Map<String, String> captcha() {
+        return captchaService.generate();
+    }
 
-  @PostMapping("/login")
-  public Object login(@RequestBody Map<String,String> body){
-    if(!captchaService.validate(body.get("captchaId"),body.get("captchaAnswer"))) 
-      return Map.of("error","Wrong Captcha");
-    
-    var opt=userRepo.findByEmail(body.get("email"));
-    if(opt.isEmpty()||!encoder.matches(body.get("password"),opt.get().getPassword())) 
-      return Map.of("error","Invalid email or password");
-    
-    // REMOVED verification check
-    return Map.of("id",opt.get().getId(),"username",opt.get().getUsername(),"email",opt.get().getEmail());
-  }
+    @PostMapping("/register")
+    public Map<String, String> register(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        String email = body.get("email");
+        String password = body.get("password");
+        String captchaId = body.get("captchaId");
+        String captchaAnswer = body.get("captchaAnswer");
 
-  // You can delete this verify endpoint, but keeping for safety
-  @GetMapping("/verify")
-  public Object verify(@RequestParam String code){
-    return Map.of("message","Verification not required now");
-  }
+        Map<String, String> res = new HashMap<>();
+        
+        if (!captchaService.validate(captchaId, captchaAnswer)) {
+            res.put("error", "Invalid captcha");
+            return res;
+        }
+        if (username == null || email == null || password == null || username.isBlank() || email.isBlank() || password.isBlank()) {
+            res.put("error", "Fill all fields");
+            return res;
+        }
+        if (userRepo.findByEmail(email).isPresent()) {
+            res.put("error", "Email already exists");
+            return res;
+        }
+        if (userRepo.findByUsername(username).isPresent()) {
+            res.put("error", "Username already taken");
+            return res;
+        }
+
+        User u = new User();
+        u.setUsername(username);
+        u.setEmail(email);
+        u.setPassword(password);
+        u.setVerified(true);
+        userRepo.save(u);
+
+        res.put("message", "Registered successfully");
+        return res;
+    }
+
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+        String captchaId = body.get("captchaId");
+        String captchaAnswer = body.get("captchaAnswer");
+
+        Map<String, Object> res = new HashMap<>();
+
+        if (!captchaService.validate(captchaId, captchaAnswer)) {
+            res.put("error", "Invalid captcha");
+            return res;
+        }
+
+        Optional<User> opt = userRepo.findByEmail(email);
+        if (opt.isEmpty() || !opt.get().getPassword().equals(password)) {
+            res.put("error", "Invalid email or password");
+            return res;
+        }
+
+        User u = opt.get();
+        res.put("id", u.getId());
+        res.put("username", u.getUsername());
+        res.put("email", u.getEmail());
+        res.put("message", "Login success");
+        return res;
+    }
 }
