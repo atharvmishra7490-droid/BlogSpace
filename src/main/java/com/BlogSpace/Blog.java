@@ -14,16 +14,18 @@ public class Blog {
     @Column(length = 5000)
     private String content;
 
-    private String author; // <-- ADDED FOR NAME
+    private String author;
 
-    private LocalDateTime createdAt; // <-- FOR TIMESTAMP
+    private Long ownerId; // <-- THIS WAS MISSING, CAUSING YOUR ERROR
+
+    private LocalDateTime createdAt;
 
     @PrePersist
     public void onCreate() {
-        this.createdAt = LocalDateTime.now(); // auto set time on post
+        this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters - IMPORTANT, if missing frontend shows blank
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -35,6 +37,9 @@ public class Blog {
 
     public String getAuthor() { return author; }
     public void setAuthor(String author) { this.author = author; }
+
+    public Long getOwnerId() { return ownerId; }
+    public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
