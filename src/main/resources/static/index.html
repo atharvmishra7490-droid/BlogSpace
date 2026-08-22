@@ -14,7 +14,7 @@
 input{background:rgba(2,6,23,.7);border:1px solid rgba(148,163,184,.2);color:white;padding:14px 16px;border-radius:14px;width:100%;margin:8px 0;outline:none}
 .captcha{background:rgba(96,165,250,.12);border:1px dashed #60a5fa;color:#93c5fd;padding:12px;border-radius:12px;text-align:center;font-weight:800;margin:8px 0;font-size:18px}
 .btn{border:none;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer} .btn-primary{background:white;color:black;width:100%;padding:14px} .btn-ghost{background:rgba(255,255,255,.08);color:white;border:1px solid rgba(255,255,255,.12)}
-#appView{display:none;max-width:1250px;margin:auto;padding:0 28px 40px;grid-template-columns:360px 1fr;gap:48px} /* 48px distance */
+#appView{display:none;max-width:1250px;margin:auto;padding:0 28px 40px;grid-template-columns:360px 1fr;gap:48px}
 @media(max-width:900px){#appView{grid-template-columns:1fr;gap:24px}}
 .blogCard{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:22px;margin-bottom:16px}
 .badge{font-size:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);padding:6px 12px;border-radius:999px;color:#cbd5e1}
@@ -31,7 +31,7 @@ input{background:rgba(2,6,23,.7);border:1px solid rgba(148,163,184,.2);color:whi
 <div id="appView">
 <div class="card" style="position:sticky;top:20px;height:fit-content"><h3 style="margin:0">Create story ✍️</h3><p style="color:#94a3b8;font-size:12px;margin:6px 0 14px">Hey <b id="meName"></b></p><input id="title" placeholder="Amazing title..."><textarea id="content" style="background:rgba(2,6,23,.7);border:1px solid rgba(148,163,184,.2);color:white;padding:14px;border-radius:14px;width:100%;outline:none" rows="8" placeholder="Write..."></textarea><button class="btn btn-primary" style="margin-top:12px;background:linear-gradient(90deg,#60a5fa,#a78bfa);color:white" onclick="addBlog()">Publish 🚀</button></div>
 
-<div style="padding-left:12px"> <!-- DISTANCE FROM POSTING BLOCK -->
+<div style="padding-left:12px">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)">
 <h2 style="font-family:Fraunces,serif;font-size:34px;margin:0;letter-spacing:-.8px">Recent Blogs</h2>
 <input id="search" style="max-width:260px;border-radius:999px" placeholder="🔍 Search recent..." oninput="filterBlogs()">
@@ -43,7 +43,21 @@ input{background:rgba(2,6,23,.7);border:1px solid rgba(148,163,184,.2);color:whi
 <script>
 let captchaId=null,allBlogs=[];
 async function loadCaptcha(){let r=await fetch('/api/auth/captcha');let d=await r.json();captchaId=d.captchaId;captchaBox.innerText=d.question;}
-async function register(){let r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:username.value,email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});let j=await r.json();alert(j.message||j.error);loadCaptcha();}
+
+async function register(){
+  let r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:username.value,email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});
+  let j=await r.json();
+  if(r.ok){
+    alert('Registered successfully! Please Login now.');
+    username.value=''; email.value=''; password.value=''; captchaAns.value='';
+    loadCaptcha();
+  } else {
+    alert(j.error||j.message||'Register failed');
+    captchaAns.value='';
+    loadCaptcha();
+  }
+}
+
 async function login(){let r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value,password:password.value,captchaId,captchaAnswer:captchaAns.value})});let d=await r.json();if(r.ok){localStorage.setItem('user',JSON.stringify(d));checkState();loadBlogs();}else alert(d.error);loadCaptcha();}
 function logout(){localStorage.removeItem('user');localStorage.removeItem('adminMode');location.reload();}
 function checkState(){let u=JSON.parse(localStorage.getItem('user')||'null');if(u){authView.style.display='none';appView.style.display='grid';userInfo.innerText='👤 '+u.username;meName.innerText=u.username;}else{authView.style.display='grid';appView.style.display='none';userInfo.innerText='Guest';}}
