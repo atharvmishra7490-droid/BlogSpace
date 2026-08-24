@@ -1,11 +1,8 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Create - BlogSpace</title><script src="https://cdn.tailwindcss.com"></script>
 <style>
-#sidebar{background:#fff!important}
-#sidebar a{color:#374151!important; font-weight:600!important}
-#sidebar a.active{background:#4f46e5!important; color:white!important}
+#sidebar{background:#fff!important} #sidebar a{color:#374151!important; font-weight:600!important} #sidebar a.active{background:#4f46e5!important; color:white!important}
 .white-card{background:#fff!important; border:1px solid #e5e7eb!important}
-#toolbar{background:#f8fafc!important; border:1px solid #e2e8f0!important}
-#toolbar button,#toolbar select{background:white!important; color:black!important; border:1px solid #e2e8f0!important; font-weight:700!important}
+#toolbar{background:#f8fafc!important; border:1px solid #e2e8f0!important} #toolbar button,#toolbar select{background:white!important; color:black!important; border:1px solid #e2e8f0!important; font-weight:700!important}
 </style>
 </head>
 <body class="bg-[#f6f6f9]"><div class="flex">
@@ -18,17 +15,15 @@
 <a href="/profile" class="flex gap-3 p-3.5 rounded-xl">👤 Profile</a>
 <a href="/settings" class="flex gap-3 p-3.5 rounded-xl">⚙️ Settings</a>
 </nav></div>
-
 <div class="ml-72 flex w-full p-6 gap-6">
-<div class="flex-1 max-w-3xl">
-<div class="white-card p-8 rounded-[24px] shadow-sm">
+<div class="flex-1 max-w-3xl"><div class="white-card p-8 rounded-[24px] shadow-sm">
 <h2 class="text-3xl font-black mb-6">Create New Blog</h2>
 <form action="/publish" method="post">
 <input name="title" id="titleIn" required placeholder="Blog Title..." class="w-full border-2 p-4 rounded-xl mb-4 text-2xl font-bold outline-none focus:border-indigo-600"/>
 <div id="toolbar" class="flex gap-2 mb-3 p-3 rounded-xl flex-wrap">
 <button type="button" onclick="document.execCommand('bold')" class="px-4 py-2 rounded-xl">B</button>
-<button type="button" onclick="document.execCommand('italic')" class="px-4 py-2 rounded-xl italic">I</button>
-<button type="button" onclick="document.execCommand('underline')" class="px-4 py-2 rounded-xl underline">U</button>
+<button type="button" onclick="document.execCommand('italic')" class="px-4 py-2 rounded-xl">I</button>
+<button type="button" onclick="document.execCommand('underline')" class="px-4 py-2 rounded-xl">U</button>
 <button type="button" onclick="document.execCommand('insertUnorderedList')" class="px-3 py-2 rounded-xl">• List</button>
 <button type="button" onclick="document.execCommand('formatBlock',false,'h2')" class="px-3 py-2 rounded-xl">H1</button>
 <input type="color" onchange="document.execCommand('foreColor',false,this.value)" class="w-10 h-10 rounded"/>
@@ -37,69 +32,60 @@
 <textarea name="content" id="hiddenContent" class="hidden"></textarea>
 <button type="submit" onclick="document.getElementById('hiddenContent').value=document.getElementById('editor').innerHTML" class="mt-6 bg-indigo-600 text-white px-10 py-4 rounded-full font-black">Publish Blog 🚀</button>
 </form></div></div>
-
-<!-- RIGHT SIDE - WORKING LOGIC -->
 <div class="w-[340px] space-y-4 hidden lg:block">
 <div class="white-card p-5 rounded-[24px] shadow-sm">
-<div class="flex items-center gap-2 mb-4"><div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">✨</div><h3 class="font-black text-sm">Writing Assistant</h3><span id="liveDot" class="ml-auto w-2 h-2 bg-green-500 rounded-full animate-pulse"></span></div>
+<div class="flex items-center gap-2 mb-4"><div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">✨</div><h3 class="font-black text-sm">Writing Assistant</h3><span class="ml-auto w-2 h-2 bg-green-500 rounded-full animate-pulse"></span></div>
 <div class="space-y-3">
 <div class="flex justify-between items-center p-3 rounded-xl border" id="seoBox"><span class="text-sm font-bold">SEO Score</span><span id="seoScore" class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100">Start typing</span></div>
-<div class="p-3 bg-gray-50 rounded-xl border"><div class="flex justify-between text-xs font-bold mb-2"><span>Progress</span><span id="pText">0%</span></div><div class="h-2 bg-gray-200 rounded-full"><div id="pBar" class="h-2 w-0 bg-indigo-600 rounded-full transition-all"></div></div><p id="pMsg" class="text-[11px] text-gray-500 mt-2">Write at least 300 words</p></div>
-<div class="grid grid-cols-2 gap-2">
-<div class="p-3 bg-indigo-50 rounded-xl border border-indigo-100 text-center"><p class="text-[10px] text-indigo-600 font-bold">WORDS</p><p id="wCount" class="font-black text-lg">0</p></div>
-<div class="p-3 bg-orange-50 rounded-xl border border-orange-100 text-center"><p class="text-[10px] text-orange-600 font-bold">READ TIME</p><p id="rTime" class="font-black text-lg">0m</p></div>
-</div>
-<div id="tipsBox" class="text-[11px] space-y-1 text-gray-600 bg-yellow-50 p-3 rounded-xl border border-yellow-100"><p class="font-bold text-yellow-700">💡 Suggestions:</p><p id="tip1">• Add a catchy title</p><p id="tip2">• Write 300+ words</p></div>
+<div class="p-3 bg-gray-50 rounded-xl border"><div class="flex justify-between text-xs font-bold mb-2"><span>Progress</span><span id="pText">0%</span></div><div class="h-2 bg-gray-200 rounded-full"><div id="pBar" class="h-2 w-0 bg-indigo-600 rounded-full transition-all"></div></div><p id="pMsg" class="text-[11px] text-gray-500 mt-2">Write title + 300 words</p></div>
+<div class="grid grid-cols-2 gap-2"><div class="p-3 bg-indigo-50 rounded-xl border text-center"><p class="text-[10px] text-indigo-600 font-bold">WORDS</p><p id="wCount" class="font-black text-lg">0</p></div><div class="p-3 bg-orange-50 rounded-xl border text-center"><p class="text-[10px] text-orange-600 font-bold">READ TIME</p><p id="rTime" class="font-black text-lg">0m</p></div></div>
+<div id="tipsBox" class="text-[11px] space-y-1 text-gray-600 bg-yellow-50 p-3 rounded-xl border"><p class="font-bold text-yellow-700">💡 Suggestions:</p><p id="tip1">• Add a catchy title</p><p id="tip2">• Write 300+ words</p></div>
 </div>
 </div>
-<div class="white-card p-5 rounded-[24px] shadow-sm">
-<h4 class="font-black text-sm">👀 Live Preview</h4>
-<div class="mt-3 p-4 bg-[#fcfcfd] rounded-xl border-2 border-dashed"><p id="preTitle" class="font-bold">Title...</p><p id="preCont" class="text-xs text-gray-400 mt-2">Content...</p></div>
-</div>
+<div class="white-card p-5 rounded-[24px] shadow-sm"><h4 class="font-black text-sm">👀 Live Preview</h4><div class="mt-3 p-4 bg-[#fcfcfd] rounded-xl border-2 border-dashed"><p id="preTitle" class="font-bold">Title...</p><p id="preCont" class="text-xs text-gray-400 mt-2">Content...</p></div></div>
 </div>
 </div></div>
-
 <script>
 const editor=document.getElementById('editor');
 const titleIn=document.getElementById('titleIn');
-
 function updateAssistant(){
   const title=titleIn.value.trim();
   const text=editor.innerText.trim();
-  const words=text?text.split(/\s+/).filter(Boolean).length:0;
+  // FIXED: Count words properly even without proper spaces
+  let words=0;
+  if(text.length>0){
+    words=text.split(/\s+/).filter(Boolean).length;
+    // If user types long string without space, count chars as fallback
+    if(words===1 && text.length>20) words=Math.floor(text.length/5);
+  }
   const chars=title.length;
-
-  // Words & Read time
   document.getElementById('wCount').innerText=words;
   document.getElementById('rTime').innerText=Math.max(1,Math.ceil(words/200))+'m';
-  document.getElementById('pBar').style.width=Math.min(100,Math.floor(words/5))+'%';
-  document.getElementById('pText').innerText=Math.min(100,Math.floor(words/5))+'%';
+  let progress=Math.min(100,Math.floor((words/300)*70)+(chars>10?30:0));
+  document.getElementById('pBar').style.width=progress+'%';
+  document.getElementById('pText').innerText=progress+'%';
   document.getElementById('hiddenContent').value=editor.innerHTML;
   document.getElementById('preCont').innerText=text.substring(0,120)||'Content...';
   document.getElementById('preTitle').innerText=title||'Title...';
-
-  // SEO Logic - WORKING
   const seoBox=document.getElementById('seoBox');
   const seoScore=document.getElementById('seoScore');
   let score=0;
-  if(chars>=20 && chars<=60) score+=40;
-  if(words>=150) score+=30;
-  if(words>=300) score+=30;
-
-  if(score<=30){ seoScore.innerText='Poor'; seoScore.className='px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-600'; seoBox.className='flex justify-between items-center p-3 rounded-xl border bg-red-50';}
-  else if(score<=70){ seoScore.innerText='Average'; seoScore.className='px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700'; seoBox.className='flex justify-between items-center p-3 rounded-xl border bg-yellow-50';}
-  else{ seoScore.innerText='Good 🔥'; seoScore.className='px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700'; seoBox.className='flex justify-between items-center p-3 rounded-xl border bg-green-50';}
-
-  // Tips Logic
-  if(chars<20) document.getElementById('tip1').innerText='• Title too short (min 20 chars)';
+  if(chars>=10) score+=30;
+  if(chars>=20 && chars<=70) score+=20;
+  if(words>=20) score+=20;
+  if(words>=100) score+=30;
+  if(score<=30){seoScore.innerText='Poor';seoScore.className='px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-600';seoBox.className='flex justify-between items-center p-3 rounded-xl border bg-red-50';}
+  else if(score<=70){seoScore.innerText='Average';seoScore.className='px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700';seoBox.className='flex justify-between items-center p-3 rounded-xl border bg-yellow-50';}
+  else{seoScore.innerText='Good 🔥';seoScore.className='px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700';seoBox.className='flex justify-between items-center p-3 rounded-xl border bg-green-50';}
+  if(chars<10) document.getElementById('tip1').innerText='• Title too short (min 10 chars)';
   else if(chars>70) document.getElementById('tip1').innerText='• Title too long (max 70 chars)';
   else document.getElementById('tip1').innerText='• Title length perfect ✅';
-
-  if(words<300) {document.getElementById('tip2').innerText=`• Write ${300-words} more words`; document.getElementById('pMsg').innerText=`${300-words} words left for better SEO`;}
-  else {document.getElementById('tip2').innerText='• Word count perfect ✅'; document.getElementById('pMsg').innerText='Great! SEO ready';}
+  if(words<300){document.getElementById('tip2').innerText=`• Write ${300-words} more words`;document.getElementById('pMsg').innerText=`${300-words} words left for better SEO`;}
+  else{document.getElementById('tip2').innerText='• Word count perfect ✅';document.getElementById('pMsg').innerText='Great! SEO ready';}
 }
-
 editor.addEventListener('input',updateAssistant);
+editor.addEventListener('keyup',updateAssistant);
 titleIn.addEventListener('input',updateAssistant);
+setInterval(updateAssistant,1000);
 </script>
 </body></html>
