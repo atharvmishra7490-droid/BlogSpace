@@ -1,54 +1,84 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Create - BlogSpace</title><script src="https://cdn.tailwindcss.com"></script>
-<script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
 <style>
-html.dark body{background:#0f172a!important}
+/* === MASTER FIX - Dark mode ko isolate kar diya === */
+body{background:#f6f6f9!important}
+#main-bg{background:#0f172a; position:fixed; inset:0; left:18rem; z-index:-1; display:none}
+html.dark #main-bg{display:block}
 
-/* SIDEBAR FORCE WHITE */
-.sidebar{background:#fff!important}
-.sidebar a{color:#1f2937!important; background:transparent!important; font-weight:600!important}
-.sidebar a.active{background:#4f46e5!important; color:#fff!important}
+/* Sidebar - Hamesha White */
+#sidebar{background:#ffffff!important; color:#1f2937!important}
+#sidebar a{color:#374151!important; background:transparent!important; font-weight:600!important}
+#sidebar a.active{background:#4f46e5!important; color:white!important; font-weight:800!important}
 
-/* TOOLBAR FORCE VISIBLE */
-.toolbar{background:#f3f4f6!important; border:2px solid #e5e7eb!important}
-.toolbar button,.toolbar select,.toolbar input{
-  background:#ffffff!important;
-  color:#111827!important;
-  border:1px solid #d1d5db!important;
-  opacity:1!important;
-  visibility:visible!important;
-}
-.toolbar button{font-weight:800!important; color:#000!important}
-.card{background:white!important}
+/* Card - Hamesha White */
+.white-card{background:#ffffff!important; color:#111827!important; border:1px solid #e5e7eb!important}
+.white-card input,.white-card #editor{color:#111827!important; background:white!important; border-color:#d1d5db!important}
+
+/* Toolbar - Hamesha Visible */
+#toolbar{background:#f3f4f6!important; border:1px solid #e5e7eb!important}
+#toolbar button,#toolbar select{background:white!important; color:black!important; border:1px solid #d1d5db!important; font-weight:700!important}
 </style>
 </head>
-<body class="bg-[#f6f6f9]"><div class="flex">
-<div class="w-72 h-screen fixed shadow p-7 border-r sidebar z-50"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1>
+<body class="bg-[#f6f6f9]"><div id="main-bg"></div>
+<div class="flex">
+<!-- LEFT SIDEBAR -->
+<div id="sidebar" class="w-72 h-screen fixed shadow p-7 border-r z-50"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1>
 <nav class="mt-10 space-y-2">
-<a href="/home" class="flex gap-3 p-3.5 rounded-xl">🏠 Home</a>
+<a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">🏠 Home</a>
 <a href="/create" class="active flex gap-3 p-3.5 rounded-xl">✍️ Create</a>
-<a href="/explore" class="flex gap-3 p-3.5 rounded-xl">🔍 Explore</a>
-<a href="/dashboard" class="flex gap-3 p-3.5 rounded-xl">📊 Dashboard</a>
-<a href="/profile" class="flex gap-3 p-3.5 rounded-xl">👤 Profile</a>
-<a href="/settings" class="flex gap-3 p-3.5 rounded-xl">⚙️ Settings</a>
+<a href="/explore" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">🔍 Explore</a>
+<a href="/dashboard" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">📊 Dashboard</a>
+<a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">👤 Profile</a>
+<a href="/settings" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">⚙️ Settings</a>
 </nav></div>
 
-<div class="ml-72 p-10 w-full"><div class="bg-white p-8 rounded-[24px] shadow-xl max-w-4xl card">
-<h2 class="text-3xl font-black mb-6 text-black">Create New Blog</h2>
+<!-- CENTER + RIGHT WRAPPER -->
+<div class="ml-72 flex w-full p-6 gap-6">
+<!-- CENTER EDITOR -->
+<div class="flex-1 max-w-3xl">
+<div class="white-card p-8 rounded-[24px] shadow-xl">
+<h2 class="text-3xl font-black mb-6">Create New Blog</h2>
 <form action="/publish" method="post">
-<input name="title" required placeholder="Blog Title..." class="w-full border-2 p-4 rounded-xl mb-4 text-2xl font-bold outline-none focus:border-indigo-600 text-black"/>
-<!-- TOOLBAR -->
-<div class="toolbar flex gap-2 mb-3 p-3 rounded-xl flex-wrap">
+<input name="title" id="titleIn" required placeholder="Blog Title..." class="w-full border-2 p-4 rounded-xl mb-4 text-2xl font-bold outline-none focus:border-indigo-600"/>
+<div id="toolbar" class="flex gap-2 mb-3 p-3 rounded-xl flex-wrap">
 <button type="button" onclick="document.execCommand('bold')" class="px-4 py-2 rounded-xl">B</button>
 <button type="button" onclick="document.execCommand('italic')" class="px-4 py-2 rounded-xl italic">I</button>
 <button type="button" onclick="document.execCommand('underline')" class="px-4 py-2 rounded-xl underline">U</button>
-<button type="button" onclick="document.execCommand('insertUnorderedList')" class="px-4 py-2 rounded-xl">• List</button>
-<button type="button" onclick="document.execCommand('insertOrderedList')" class="px-4 py-2 rounded-xl">1. List</button>
-<button type="button" onclick="document.execCommand('formatBlock',false,'<h2>')" class="px-3 py-2 rounded-xl">H1</button>
+<button type="button" onclick="document.execCommand('insertUnorderedList')" class="px-3 py-2 rounded-xl">• List</button>
+<button type="button" onclick="document.execCommand('insertOrderedList')" class="px-3 py-2 rounded-xl">1. List</button>
+<button type="button" onclick="document.execCommand('formatBlock',false,'h2')" class="px-3 py-2 rounded-xl">H1</button>
 <input type="color" onchange="document.execCommand('foreColor',false,this.value)" class="w-10 h-10 rounded"/>
-<select onchange="document.execCommand('fontName',false,this.value)" class="rounded-xl px-3 py-2"><option>Arial</option><option>Georgia</option><option>Mono</option></select>
+<select onchange="document.execCommand('fontName',false,this.value)" class="rounded-xl px-3 py-2"><option>Arial</option><option>Georgia</option><option>Times</option></select>
 <select onchange="document.execCommand('fontSize',false,this.value)" class="rounded-xl px-3 py-2"><option value="3">Normal</option><option value="5">Large</option><option value="7">Huge</option></select>
 </div>
-<div id="editor" contenteditable="true" class="w-full border-2 h-[380px] p-5 rounded-xl overflow-auto outline-none focus:border-indigo-600 text-lg text-black"></div>
+<div id="editor" contenteditable="true" class="w-full border-2 h-[380px] p-5 rounded-xl overflow-auto outline-none focus:border-indigo-600 text-lg" data-placeholder="Start writing..."></div>
 <textarea name="content" id="hiddenContent" class="hidden"></textarea>
 <button type="submit" onclick="document.getElementById('hiddenContent').value=document.getElementById('editor').innerHTML" class="mt-6 bg-indigo-600 text-white px-10 py-4 rounded-full font-black text-lg">Publish Blog 🚀</button>
-</form></div></div></div></body></html>
+</form></div></div>
+
+<!-- RIGHT SIDE - AB GAYAB NAHI HOGA -->
+<div class="w-[340px] space-y-5 hidden lg:block">
+<div class="bg-black text-white p-6 rounded-[24px] sticky top-6">
+<h3 class="font-black">✨ Writing Power</h3>
+<div class="mt-4 space-y-3 text-sm">
+<div class="flex justify-between bg-white/10 p-3 rounded-xl"><span>SEO Score</span><span class="bg-green-400 text-black px-2 rounded-full text-xs font-bold">Good</span></div>
+<div class="bg-white/10 p-3 rounded-xl"><div class="flex justify-between text-xs mb-2"><span>Progress</span><span id="pText">0%</span></div><div class="h-1.5 bg-white/20 rounded-full"><div id="pBar" class="h-1.5 w-0 bg-white rounded-full transition-all"></div></div></div>
+</div>
+</div>
+<div class="white-card p-5 rounded-[24px] shadow-sm">
+<h4 class="font-black text-sm">Live Preview 👀</h4>
+<div class="mt-3 p-3 bg-gray-50 rounded-xl border"><p id="preTitle" class="font-bold text-sm">Title preview</p><p id="preCont" class="text-xs text-gray-400 mt-1">Story preview...</p></div>
+</div>
+</div>
+</div></div>
+<script>
+const editor=document.getElementById('editor');
+editor.addEventListener('input',()=>{
+  document.getElementById('hiddenContent').value=editor.innerHTML;
+  const words=editor.innerText.trim().split(/\s+/).filter(Boolean).length;
+  const p=Math.min(100,Math.floor(words/5)); document.getElementById('pBar').style.width=p+'%'; document.getElementById('pText').innerText=p+'%';
+  document.getElementById('preCont').innerText=editor.innerText.substring(0,100);
+});
+document.getElementById('titleIn').addEventListener('input',e=>{document.getElementById('preTitle').innerText=e.target.value||'Title preview';});
+</script>
+</body></html>
