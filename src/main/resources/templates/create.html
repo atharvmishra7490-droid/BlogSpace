@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-[#f8fafc] flex">
+<div class="w-72 h-screen bg-[#0f0f0f] text-white p-6 fixed flex flex-col">
+<div class="flex items-center gap-3 mb-10"><div class="w-9 h-9 bg-white text-black rounded-lg flex items-center justify-center font-bold">B</div><h1 class="text-xl font-bold">BlogSpace</h1></div>
+<nav class="space-y-2 flex-1">
+<a href="/" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl">🏠 Home</a>
+<a href="/create" class="flex items-center gap-3 py-3 px-4 bg-white text-black rounded-xl font-semibold">✏️ Create Blog</a>
+<a href="/explore" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl">🔍 Explore</a>
+<a href="/dashboard" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl">📊 Dashboard</a>
+<a href="/profile" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl">👤 Profile</a>
+</nav></div>
+<div class="ml-72 w-full p-10"><div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border">
+<div class="p-8 border-b"><input id="title" placeholder="Blog Title..." class="w-full text-4xl font-bold outline-none placeholder:text-gray-300"></div>
+<div class="flex items-center gap-1 p-3 bg-gray-50 border-b flex-wrap">
+<button onclick="exec('bold')" class="w-9 h-9 bg-white border rounded-lg font-bold hover:bg-gray-100">B</button>
+<button onclick="exec('italic')" class="w-9 h-9 bg-white border rounded-lg italic hover:bg-gray-100">I</button>
+<button onclick="exec('underline')" class="w-9 h-9 bg-white border rounded-lg underline hover:bg-gray-100">U</button>
+<div class="w-px h-6 bg-gray-300 mx-2"></div>
+<input type="color" oninput="execColor(this.value)" value="#000000" class="w-9 h-9 rounded cursor-pointer">
+<select onchange="execSize(this.value)" class="h-9 px-3 bg-white border rounded-lg"><option value="3">Normal</option><option value="5">Heading</option><option value="7">Large Heading</option></select>
+</div>
+<div id="editor" contenteditable="true" class="min-h-[400px] p-8 outline-none text-[17px] leading-7 text-gray-800" data-placeholder="Start writing your story..."></div>
+<div class="p-6 bg-gray-50 rounded-b-2xl flex justify-end"><button onclick="publish()" class="bg-black text-white px-8 py-3 rounded-xl font-semibold hover:bg-gray-800">Publish Blog →</button></div>
+</div></div>
+<script>function exec(c){document.execCommand(c,false,null)}function execColor(v){document.execCommand('foreColor',false,v)}function execSize(v){document.execCommand('fontSize',false,v)}function publish(){alert('Published: '+document.getElementById('title').value)}</script>
+</body></html>
