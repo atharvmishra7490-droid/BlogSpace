@@ -1,4 +1,4 @@
-package com.blogspace.controller;
+package com.BlogSpace;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
