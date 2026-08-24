@@ -1,84 +1,18 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>BlogSpace | Create Article</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    
-    <!-- TinyMCE Rich Text Editor CDN -->
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-</head>
-<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
-
-    <!-- Header Navigation -->
-    <header class="sticky top-0 bg-white border-b border-slate-200 z-30">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
-            <a href="/" class="font-bold text-xl text-indigo-600 flex items-center gap-2">
-                <i class="fa-solid fa-layer-group"></i> BlogSpace
-            </a>
-            <div class="flex items-center gap-4">
-                <a href="/dashboard" class="text-slate-600 hover:text-indigo-600 font-medium text-sm">Dashboard</a>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-4xl mx-auto px-6 py-10 w-full">
-        <div class="flex justify-between items-end mb-8">
-            <div>
-                <h1 class="text-3xl font-extrabold text-slate-900">Write & Publish Article</h1>
-                <p class="text-sm text-slate-500 mt-1">Use the rich text editor to style your post.</p>
-            </div>
-        </div>
-
-        <form action="/blogs/save" method="POST" class="bg-white p-8 border border-slate-200 rounded-xl shadow-sm space-y-6">
-            
-            <!-- Title and Category Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-500 mb-2">Article Title</label>
-                    <input type="text" name="title" required placeholder="Enter a captivating title..." 
-                           class="w-full px-4 py-3 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50"/>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-500 mb-2">Category</label>
-                    <input type="text" name="category" required placeholder="e.g., Technology, Design, AI" 
-                           class="w-full px-4 py-3 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50"/>
-                </div>
-            </div>
-
-            <!-- Rich Text Editor Area -->
-            <div>
-                <label class="block text-xs font-bold uppercase text-slate-500 mb-2">Article Body</label>
-                <!-- The textarea will be replaced by TinyMCE -->
-                <textarea id="rich-text-editor" name="content" placeholder="Start writing your amazing article here..."></textarea>
-            </div>
-
-            <div class="pt-4 border-t border-slate-100 flex justify-end gap-4">
-                <a href="/dashboard" class="px-6 py-3 text-slate-600 font-bold hover:bg-slate-100 rounded-lg transition">Cancel</a>
-                <button type="submit" class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition">
-                    <i class="fa-solid fa-paper-plane mr-2"></i> Publish Post
-                </button>
-            </div>
-        </form>
-    </main>
-
-    <!-- Initialize TinyMCE -->
-    <script>
-        tinymce.init({
-            selector: '#rich-text-editor',
-            height: 500,
-            menubar: false,
-            plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'help', 'wordcount'
-            ],
-            toolbar: 'undo redo | blocks | ' +
-                'bold italic forecolor | alignleft aligncenter ' +
-                'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | help',
-            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.6; }'
-        });
-    </script>
-</body>
-</html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Create</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-[#f6f6f9]"><div class="flex"><div class="w-72 bg-white h-screen fixed shadow p-7"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1><nav class="mt-10 space-y-2"><a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a><a href="/create" class="flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold">Create</a><a href="/explore" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Explore</a><a href="/dashboard" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Dashboard</a><a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a><a href="/settings" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Settings</a></nav></div>
+<div class="ml-72 p-10 w-full"><div class="bg-white p-8 rounded-[24px] shadow-xl max-w-4xl">
+<h2 class="text-3xl font-black mb-6">Create New Blog</h2>
+<form action="/publish" method="post">
+<input name="title" required placeholder="Blog Title..." class="w-full border-2 p-4 rounded-xl mb-4 text-2xl font-bold outline-none focus:border-indigo-600"/>
+<div class="flex gap-2 mb-3 border-2 p-3 rounded-xl bg-gray-50 flex-wrap">
+<button type="button" onclick="document.execCommand('bold')" class="px-4 py-2 border bg-white rounded-xl font-black">B</button>
+<button type="button" onclick="document.execCommand('italic')" class="px-4 py-2 border bg-white rounded-xl italic font-bold">I</button>
+<button type="button" onclick="document.execCommand('underline')" class="px-4 py-2 border bg-white rounded-xl underline font-bold">U</button>
+<input type="color" onchange="document.execCommand('foreColor',false,this.value)" class="w-10 h-10 rounded" title="Color"/>
+<select onchange="document.execCommand('fontName',false,this.value)" class="border-2 rounded-xl px-3 py-2"><option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="Courier New">Mono</option><option value="Times New Roman">Times</option></select>
+<select onchange="document.execCommand('fontSize',false,this.value)" class="border-2 rounded-xl px-3 py-2"><option value="3">Normal</option><option value="5">Large</option><option value="7">Huge</option></select>
+</div>
+<div id="editor" contenteditable="true" class="w-full border-2 h-[380px] p-5 rounded-xl overflow-auto outline-none focus:border-indigo-600 text-lg" data-placeholder="Start writing your story..."></div>
+<textarea name="content" id="hiddenContent" class="hidden"></textarea>
+<button type="submit" onclick="document.getElementById('hiddenContent').value=document.getElementById('editor').innerHTML" class="mt-6 bg-indigo-600 text-white px-10 py-4 rounded-full font-black text-lg">Publish Blog</button>
+</form></div></div></div></body></html>

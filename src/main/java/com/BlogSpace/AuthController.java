@@ -1,51 +1,56 @@
 package com.BlogSpace;
-
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthController {
+    @Autowired UserRepository ur;
+    @Autowired CaptchaService cs;
+    @Autowired BCryptPasswordEncoder enc;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private EmailService emailService;
-
-    @PostMapping("/register")
-    public String registerUser(
-            @RequestParam String username,
-            @RequestParam String email,
-            @RequestParam String password,
-            @RequestParam String fullName,
-            @RequestParam int captchaAnswer,
-            HttpSession session) {
-
-        Integer expectedCaptcha = (Integer) session.getAttribute("CAPTCHA_ANSWER");
-        if (expectedCaptcha == null || captchaAnswer != expectedCaptcha) {
-            return "redirect:/login?error=captcha";
-        }
-
-        if (userRepository.findByUsername(username).isPresent()) {
-            return "redirect:/login?error=user_exists";
-        }
-
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setFullName(fullName);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole("ROLE_USER");
-        userRepository.save(user);
-
-        emailService.sendWelcomeEmail(email, username);
-        return "redirect:/login?registered=true";
+    @GetMapping("/login")
+    public String loginPage(Model m, HttpSession s){
+        m.addAttribute("captchaQ", cs.gen(s));
+        return "login";
     }
+    @PostMapping("/signup")
+    public String signup(@RequestParam String username, @RequestParam String email,
+                         @RequestParam String password, @RequestParam String gender,
+                         @RequestParam Integer age, @RequestParam(required=false) Integer captchaAns,
+                         HttpSession s, Model m){
+        // Captcha bypass for now
+        if(ur.findByUsername(username).isPresent()){
+            m.addAttribute("error","Username already taken");
+            m.addAttribute("captchaQ",cs.gen(s));
+            return "login";
+        }
+        User u=new User();
+        u.setUsername(username); u.setEmail(email);
+        u.setPassword(enc.encode(password));
+        u.setGender(gender); u.setAge(age);
+        ur.save(u);
+        s.setAttribute("userId",u.getId());
+        s.setAttribute("username",u.getUsername());
+        return "redirect:/home";
+    }
+    @PostMapping("/doLogin")
+    public String doLogin(@RequestParam String username, @RequestParam String password,
+                          @RequestParam(required=false) Integer captchaAns, HttpSession s, Model m){
+        // Captcha bypass for now
+        var user=ur.findByUsername(username).orElse(null);
+        if(user==null || !enc.matches(password,user.getPassword())){
+            m.addAttribute("error","Invalid Username or Password");
+            m.addAttribute("captchaQ",cs.gen(s));
+            return "login";
+        }
+        s.setAttribute("userId",user.getId());
+        s.setAttribute("username",user.getUsername());
+        return "redirect:/home";
+    }
+    @GetMapping("/logout")
+    public String logout(HttpSession s){ s.invalidate(); return "redirect:/"; }
 }

@@ -1,24 +1,3 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>BlogSpace | Reader View</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-50 text-slate-900">
-    <article class="max-w-3xl mx-auto px-6 py-12 space-y-6">
-        <a href="/" class="text-indigo-600 font-bold text-sm">← Back to Feed</a>
-        <span class="block text-xs font-bold uppercase text-indigo-600 tracking-wider" th:text="${blog.category}">Category</span>
-        <h1 class="text-4xl font-black text-slate-900" th:text="${blog.title}">Article Header</h1>
-
-        <div class="flex items-center gap-4 text-xs text-slate-500 border-y border-slate-200 py-3">
-            <span>By <strong th:text="${blog.author != null ? blog.author.username : 'Unknown'}">Author</strong></span>
-            <span>•</span>
-            <span th:text="${blog.views} + ' views'">0 views</span>
-        </div>
-
-        <div class="prose max-w-none text-slate-700 leading-relaxed text-base whitespace-pre-line" th:text="${blog.content}">
-            Content...
-        </div>
-    </article>
-</body>
-</html>
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Blog</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-[#f6f6f9]"><div class="flex"><div class="w-72 bg-white h-screen fixed shadow p-7"><a href="/explore" class="font-black text-indigo-600 text-lg">← Back to Explore</a></div>
+<div class="ml-72 p-10 w-full"><div class="bg-white p-12 rounded-[28px] shadow-sm max-w-4xl"><h1 class="text-5xl font-black leading-tight" th:text="${blog.title}"></h1><p class="text-gray-500 mt-4 font-bold" th:text="${blog.authorName}+' • '+${#temporals.format(blog.createdAt,'dd MMM yyyy HH:mm')}"></p><div th:utext="${blog.content}" class="mt-10 text-xl leading-relaxed"></div></div></div></div></body></html>

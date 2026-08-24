@@ -1,9 +1,6 @@
 package com.BlogSpace;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
-
-public interface BlogRepository extends JpaRepository<Blog, Long> {
-    List<Blog> findByAuthorId(Long authorId);
-    List<Blog> findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(String title, String category);
+import org.springframework.data.jpa.repository.JpaRepository; import java.util.List;
+public interface BlogRepository extends JpaRepository<Blog, Long>{
+    List<Blog> findByUserId(Long userId);
+    List<Blog> findByTitleContainingIgnoreCase(String q);
 }

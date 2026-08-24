@@ -1,41 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>BlogSpace | Explore</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-</head>
-<body class="bg-slate-50 text-slate-900">
-    <div class="max-w-7xl mx-auto px-6 py-10 space-y-8">
-        <div class="flex justify-between items-center">
-            <a href="/" class="text-indigo-600 font-bold"><i class="fa-solid fa-arrow-left"></i> Home</a>
-            <h1 class="text-2xl font-bold">Explore & Recommendations</h1>
-        </div>
-
-        <!-- Dynamic Live Search Form -->
-        <form action="/explore" method="GET" class="max-w-xl mx-auto flex gap-2">
-            <input type="text" name="query" th:value="${query}" placeholder="Search posts by title or category..." class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"/>
-            <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700">Search</button>
-        </form>
-
-        <!-- Topic Ideas & Recommendations -->
-        <div class="bg-indigo-50 border border-indigo-100 p-6 rounded-2xl space-y-3">
-            <h3 class="text-indigo-900 font-bold text-sm uppercase tracking-wider"><i class="fa-solid fa-lightbulb"></i> Recommended Ideas to Write</h3>
-            <div class="flex flex-wrap gap-2">
-                <span class="bg-white border border-indigo-200 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">Microservice Architecture</span>
-                <span class="bg-white border border-indigo-200 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">Java 21 Virtual Threads</span>
-                <span class="bg-white border border-indigo-200 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">Docker Optimization</span>
-            </div>
-        </div>
-
-        <!-- Article Listing Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div th:each="blog : ${blogs}" class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-                <span class="text-xs font-bold text-indigo-600 uppercase" th:text="${blog.category}">Category</span>
-                <h3 class="text-lg font-bold mt-1" th:text="${blog.title}">Title</h3>
-                <a th:href="@{'/blog/' + ${blog.id}}" class="inline-block mt-4 text-indigo-600 text-sm font-semibold hover:underline">Read Post →</a>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Explore</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-[#f6f6f9]"><div class="flex"><div class="w-72 bg-white h-screen fixed shadow p-7"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1><nav class="mt-10 space-y-2"><a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a><a href="/create" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Create</a><a href="/explore" class="flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold">Explore</a><a href="/dashboard" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Dashboard</a><a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a><a href="/settings" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Settings</a></nav></div>
+<div class="ml-72 p-10 w-full"><div class="flex justify-between items-center"><h1 class="text-4xl font-black">Explore Blogs</h1><form class="flex gap-2"><input name="q" placeholder="Search by title..." class="border-2 p-3 rounded-full w-80 px-6 outline-none focus:border-indigo-600"/><button class="bg-black text-white px-8 rounded-full font-bold">Search</button></form></div>
+<div class="grid md:grid-cols-2 gap-6 mt-8"><div th:each="b:${blogs}" class="bg-white p-6 rounded-[20px] shadow-sm hover:shadow-xl transition"><a th:href="@{'/blog/'+${b.id}}" th:text="${b.title}" class="font-black text-xl hover:text-indigo-600"></a><p class="text-sm text-gray-500 mt-1" th:text="${b.authorName}+' • '+${#temporals.format(b.createdAt,'dd MMM yyyy HH:mm')}"></p><div th:utext="${b.content}" class="mt-3 text-gray-700 line-clamp-3"></div></div></div>
+</div></div></body></html>

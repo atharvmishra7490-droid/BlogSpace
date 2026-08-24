@@ -1,93 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>BlogSpace | Authentication</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - BlogSpace</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style> @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap'); body{font-family:'Outfit',sans-serif} </style>
 </head>
-<body class="bg-slate-900 text-slate-100 flex items-center justify-center min-h-screen p-4">
+<body class="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 relative overflow-hidden">
+<div class="absolute w-[600px] h-[600px] bg-indigo-600 rounded-full blur-[150px] opacity-30 -top-48 -left-48"></div>
+<div class="absolute w-[500px] h-[500px] bg-purple-600 rounded-full blur-[150px] opacity-30 -bottom-32 -right-32"></div>
 
-    <div class="w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-8 space-y-6">
-        <div class="text-center">
-            <h1 class="text-3xl font-extrabold text-indigo-400"><i class="fa-solid fa-layer-group"></i> BlogSpace</h1>
-            <p class="text-sm text-slate-400 mt-1">Access your creator dashboard</p>
-        </div>
+<div class="relative z-10 w-full max-w-[1050px] bg-white rounded-[32px] shadow-[0_20px_80px_rgba(0,0,0,0.4)] grid md:grid-cols-2 overflow-hidden">
 
-        <!-- Success & Error Alerts -->
-        <div th:if="${param.registered}" class="p-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm rounded-lg text-center">
-            Account created successfully! Please sign in.
-        </div>
-        <div th:if="${param.error}" class="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm rounded-lg text-center">
-            Invalid username or password.
-        </div>
+<div class="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 p-10 text-white flex flex-col justify-between">
+<div>
+<h1 class="text-3xl font-black">BlogSpace.</h1>
+<h2 class="text-5xl font-black leading-[0.9] mt-16">Write<br>what you<br>love.</h2>
+<p class="mt-6 text-white/70 text-lg">Join 10k+ creators writing premium blogs daily.</p>
+</div>
+<div class="bg-white/10 backdrop-blur-xl rounded-2xl p-5 border border-white/10 mt-10">
+<div class="flex gap-2"><img src="https://i.pravatar.cc/40?img=1" class="w-8 h-8 rounded-full"/><img src="https://i.pravatar.cc/40?img=2" class="w-8 h-8 rounded-full -ml-2"/><img src="https://i.pravatar.cc/40?img=3" class="w-8 h-8 rounded-full -ml-2"/></div>
+<p class="text-sm mt-3 font-semibold">"BlogSpace helped me grow from 0 to 50k readers!"</p>
+</div>
+</div>
 
-        <!-- Toggle Switch -->
-        <div class="flex bg-slate-700/50 p-1 rounded-xl">
-            <button id="tab-login" type="button" onclick="showForm('login')" class="w-1/2 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white transition">Sign In</button>
-            <button id="tab-register" type="button" onclick="showForm('register')" class="w-1/2 py-2 text-sm font-semibold rounded-lg text-slate-400 hover:text-white transition">Sign Up</button>
-        </div>
+<div class="p-8 md:p-10 bg-white">
+<div class="flex bg-gray-100 p-1.5 rounded-full w-fit mx-auto">
+<button id="tabLogin" onclick="showLogin()" class="px-8 py-2.5 rounded-full bg-black text-white font-bold text-sm transition">Login</button>
+<button id="tabSignup" onclick="showSignup()" class="px-8 py-2.5 rounded-full font-bold text-sm text-gray-500 transition">Sign Up</button>
+</div>
 
-        <!-- Spring Security Native Sign In Form -->
-        <form id="form-login" th:action="@{/login}" method="POST" class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Username</label>
-                <input type="text" name="username" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-white"/>
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Password</label>
-                <input type="password" name="password" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-white"/>
-            </div>
-            <button type="submit" class="w-full py-3 bg-indigo-600 font-bold rounded-lg hover:bg-indigo-500 transition shadow-lg shadow-indigo-600/30">Log In</button>
-        </form>
+<p th:if="${error}" th:text="${error}" class="mt-5 bg-red-50 text-red-600 text-sm font-bold p-3 rounded-xl text-center border border-red-100"></p>
 
-        <!-- User Registration Form -->
-        <form id="form-register" th:action="@{/register}" method="POST" class="space-y-4 hidden">
-            <div>
-                <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Full Name</label>
-                <input type="text" name="fullName" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-white"/>
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Username</label>
-                <input type="text" name="username" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-white"/>
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Email</label>
-                <input type="email" name="email" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-white"/>
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Password</label>
-                <input type="password" name="password" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-white"/>
-            </div>
+<!-- LOGIN FORM -->
+<form id="loginForm" action="/doLogin" method="post" class="mt-8 space-y-4">
+<h3 class="text-2xl font-black">Welcome back 👋</h3>
+<p class="text-gray-500 -mt-3">Login to continue writing</p>
+<div class="relative mt-6"><i class="fa fa-user absolute left-4 top-4 text-gray-400"></i><input name="username" required placeholder="Username" class="w-full border-2 pl-11 pr-4 py-3.5 rounded-xl focus:border-indigo-600 outline-none font-medium"/></div>
+<div class="relative"><i class="fa fa-lock absolute left-4 top-4 text-gray-400"></i><input name="password" type="password" required placeholder="Password" class="w-full border-2 pl-11 pr-4 py-3.5 rounded-xl focus:border-indigo-600 outline-none font-medium"/></div>
+<div class="bg-gray-50 border-2 border-dashed p-3 rounded-xl flex justify-between items-center font-black"><span th:text="${captchaQ}" class="text-indigo-600">2 + 3 =?</span><input name="captchaAns" type="number" required placeholder="Ans" class="border-2 w-20 p-2 rounded-lg text-center font-bold outline-none"/></div>
+<button class="w-full bg-black text-white py-4 rounded-xl font-black text-base hover:bg-gray-900 transition flex justify-center gap-2 items-center"><span>Login</span> <i class="fa fa-arrow-right"></i></button>
+</form>
 
-            <!-- Captcha Section -->
-            <div class="p-3 bg-slate-900 rounded-lg border border-slate-700 space-y-2">
-                <span class="text-xs text-indigo-400 font-semibold" th:text="${captchaQuestion}">Security Check</span>
-                <input type="number" name="captchaAnswer" placeholder="Enter answer" required class="w-full px-3 py-1 bg-slate-800 border border-slate-700 rounded text-sm outline-none text-white"/>
-            </div>
+<!-- SIGNUP FORM -->
+<form id="signupForm" action="/signup" method="post" class="mt-8 space-y-3 hidden">
+<h3 class="text-2xl font-black">Create account ✨</h3>
+<p class="text-gray-500 -mt-3">Start your journey for free</p>
+<div class="grid grid-cols-1 gap-3 mt-6">
+<input name="username" required minlength="3" placeholder="Username (min 3 chars)" class="w-full border-2 p-3.5 rounded-xl outline-none focus:border-indigo-600 font-medium"/>
+<input name="email" type="email" required placeholder="Email address" class="w-full border-2 p-3.5 rounded-xl outline-none focus:border-indigo-600 font-medium"/>
+<input name="password" type="password" required minlength="6" placeholder="Password (min 6 chars)" class="w-full border-2 p-3.5 rounded-xl outline-none focus:border-indigo-600 font-medium"/>
+<div class="flex gap-3"><input name="age" type="number" required placeholder="Age" class="w-1/2 border-2 p-3.5 rounded-xl outline-none"/><select name="gender" class="w-1/2 border-2 p-3.5 rounded-xl outline-none"><option>Male</option><option>Female</option><option>Other</option></select></div>
+<div class="bg-indigo-50 border-2 border-indigo-100 p-3 rounded-xl flex justify-between items-center font-black"><span th:text="${captchaQ}" class="text-indigo-600">2 + 3 =?</span><input name="captchaAns" type="number" required placeholder="Ans" class="border-2 w-20 p-2 rounded-lg text-center font-bold outline-none"/></div>
+</div>
+<button class="w-full bg-indigo-600 text-white py-4 rounded-xl font-black text-base hover:bg-indigo-700 transition mt-2">Create Account</button>
+<p class="text-center text-xs text-gray-400 mt-2">By signing up you agree to our Terms</p>
+</form>
 
-            <button type="submit" class="w-full py-3 bg-indigo-600 font-bold rounded-lg hover:bg-indigo-500 transition shadow-lg shadow-indigo-600/30">Create Account</button>
-        </form>
-    </div>
+</div>
+</div>
 
-    <script>
-        function showForm(type) {
-            const loginF = document.getElementById('form-login');
-            const regF = document.getElementById('form-register');
-            const btnL = document.getElementById('tab-login');
-            const btnR = document.getElementById('tab-register');
-
-            if (type === 'login') {
-                loginF.classList.remove('hidden');
-                regF.classList.add('hidden');
-                btnL.className = "w-1/2 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white transition";
-                btnR.className = "w-1/2 py-2 text-sm font-semibold rounded-lg text-slate-400 hover:text-white transition";
-            } else {
-                regF.classList.remove('hidden');
-                loginF.classList.add('hidden');
-                btnR.className = "w-1/2 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white transition";
-                btnL.className = "w-1/2 py-2 text-sm font-semibold rounded-lg text-slate-400 hover:text-white transition";
-            }
-        }
-    </script>
+<script>
+function showLogin(){document.getElementById('loginForm').classList.remove('hidden');document.getElementById('signupForm').classList.add('hidden');document.getElementById('tabLogin').className='px-8 py-2.5 rounded-full bg-black text-white font-bold text-sm';document.getElementById('tabSignup').className='px-8 py-2.5 rounded-full font-bold text-sm text-gray-500';}
+function showSignup(){document.getElementById('signupForm').classList.remove('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('tabSignup').className='px-8 py-2.5 rounded-full bg-black text-white font-bold text-sm';document.getElementById('tabLogin').className='px-8 py-2.5 rounded-full font-bold text-sm text-gray-500';}
+</script>
 </body>
 </html>
