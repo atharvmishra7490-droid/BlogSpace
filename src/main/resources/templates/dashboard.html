@@ -2,20 +2,25 @@
 <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
 <style>
 html.dark body{background:#0f172a!important;color:white!important}
-html.dark.bg-white{background:#1e293b!important}
-html.dark.text-gray-500{color:#94a3b8!important}
-html.dark.bg-gray-100{background:#334155!important}
+html.dark.main-area{background:#0f172a!important;color:white!important}
+html.dark.card{background:#1e293b!important;color:white!important;border-color:#334155!important}
+html.dark.card.text-gray-500{color:#94a3b8!important}
+html.dark.card.bg-gray-100{background:#334155!important}
+/* Sidebar ko dark mode se bachao */
+.sidebar{background:white!important}
+.sidebar a{color:#1f2937!important}
+.sidebar a.active{color:white!important}
 </style>
 </head>
-<body class="bg-[#f6f6f9]"><div class="flex"><div class="w-72 bg-white h-screen fixed shadow p-7"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1><nav class="mt-10 space-y-2"><a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a><a href="/create" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Create</a><a href="/explore" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Explore</a><a href="/dashboard" class="flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold">Dashboard</a><a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a><a href="/settings" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Settings</a></nav></div>
+<body class="bg-[#f6f6f9]"><div class="flex"><div class="w-72 bg-white h-screen fixed shadow p-7 z-10 sidebar"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1><nav class="mt-10 space-y-2"><a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a><a href="/create" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Create</a><a href="/explore" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Explore</a><a href="/dashboard" class="active flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold">Dashboard</a><a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a><a href="/settings" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Settings</a></nav></div>
 
-<div class="ml-72 p-8 w-full">
+<div class="ml-72 p-8 w-full main-area">
 <div class="flex justify-between items-end"><div><h1 class="text-4xl font-black">Dashboard</h1><p class="text-gray-500 mt-1">Track your writing journey</p></div><a href="/create" class="bg-black text-white px-6 py-3 rounded-full font-bold">+ New Blog</a></div>
 
 <div class="grid grid-cols-4 gap-5 mt-8">
-<div class="bg-white p-6 rounded-[24px] shadow-sm border hover:shadow-md transition"><div class="flex justify-between"><div class="w-11 h-11 bg-indigo-100 rounded-xl flex items-center justify-center">📚</div><span class="bg-green-50 text-green-600 text-xs px-3 py-1 rounded-full font-bold h-fit">↗ Live</span></div><p class="text-gray-500 font-bold text-sm mt-4">Total Blogs</p><p class="text-4xl font-black mt-1" th:text="${total}">0</p><div class="mt-3 h-1.5 bg-gray-100 rounded-full"><div class="h-1.5 w-[75%] bg-indigo-600 rounded-full"></div></div></div>
-<div class="bg-white p-6 rounded-[24px] shadow-sm border hover:shadow-md transition"><div class="w-11 h-11 bg-yellow-100 rounded-xl flex items-center justify-center">✍️</div><p class="text-gray-500 font-bold text-sm mt-4">My Blogs</p><p class="text-4xl font-black mt-1" th:text="${my}">0</p><p class="text-xs text-gray-400 mt-2">Your creations</p></div>
-<div class="bg-white p-6 rounded-[24px] shadow-sm border hover:shadow-md transition"><div class="flex justify-between"><div class="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center">🔥</div><span class="bg-orange-50 text-orange-600 text-xs px-2 py-1 rounded-full font-bold h-fit">Today</span></div><p class="text-gray-500 font-bold text-sm mt-4">Today Posted</p><p class="text-4xl font-black mt-1" th:text="${today}">0</p><p class="text-xs text-gray-400 mt-2">Keep posting!</p></div>
+<div class="card bg-white p-6 rounded-[24px] shadow-sm border hover:shadow-md transition"><div class="flex justify-between"><div class="w-11 h-11 bg-indigo-100 rounded-xl flex items-center justify-center">📚</div><span class="bg-green-50 text-green-600 text-xs px-3 py-1 rounded-full font-bold h-fit">↗ Live</span></div><p class="text-gray-500 font-bold text-sm mt-4">Total Blogs</p><p class="text-4xl font-black mt-1" th:text="${total}">0</p></div>
+<div class="card bg-white p-6 rounded-[24px] shadow-sm border hover:shadow-md transition"><div class="w-11 h-11 bg-yellow-100 rounded-xl flex items-center justify-center">✍️</div><p class="text-gray-500 font-bold text-sm mt-4">My Blogs</p><p class="text-4xl font-black mt-1" th:text="${my}">0</p><p class="text-xs text-gray-400 mt-2">Your creations</p></div>
+<div class="card bg-white p-6 rounded-[24px] shadow-sm border hover:shadow-md transition"><div class="flex justify-between"><div class="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center">🔥</div><span class="bg-orange-50 text-orange-600 text-xs px-2 py-1 rounded-full font-bold h-fit">Today</span></div><p class="text-gray-500 font-bold text-sm mt-4">Today Posted</p><p class="text-4xl font-black mt-1" th:text="${today}">0</p><p class="text-xs text-gray-400 mt-2">Keep posting!</p></div>
 <div class="bg-gradient-to-br from-indigo-600 to-violet-600 p-6 rounded-[24px] shadow-lg text-white"><div class="flex justify-between"><div class="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center">👥</div><span class="bg-white/20 text-xs px-3 py-1 rounded-full h-fit">● Online</span></div><p class="text-indigo-200 font-bold text-sm mt-4">Active Users</p><p class="text-4xl font-black mt-1" th:text="${active}">1</p><p class="text-xs text-indigo-200 mt-2">Community growing</p></div>
 </div>
 
@@ -23,7 +28,7 @@ html.dark.bg-gray-100{background:#334155!important}
 <div class="flex-1">
 <h3 class="font-black text-2xl">My Blogs</h3>
 
-<div th:if="${#lists.isEmpty(myBlogs)}" class="bg-white p-12 rounded-[24px] shadow-sm border mt-4 text-center">
+<div th:if="${#lists.isEmpty(myBlogs)}" class="card bg-white p-12 rounded-[24px] shadow-sm border mt-4 text-center">
 <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto text-4xl">✨</div>
 <h4 class="font-black text-xl mt-4">No blogs yet? Let's change that!</h4>
 <p class="text-gray-500 text-sm mt-2 max-w-sm mx-auto">Your dashboard is empty because you haven't written anything. Create your first story and see stats here.</p>
@@ -34,7 +39,7 @@ html.dark.bg-gray-100{background:#334155!important}
 </div>
 
 <div class="mt-4 space-y-3">
-<div th:each="b:${myBlogs}" class="bg-white p-5 rounded-2xl border flex justify-between items-center hover:border-black hover:shadow-md transition group">
+<div th:each="b:${myBlogs}" class="card bg-white p-5 rounded-2xl border flex justify-between items-center hover:border-black hover:shadow-md transition group">
 <div class="flex gap-3 items-center"><div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">📝</div><span th:text="${b.title}" class="font-bold group-hover:text-indigo-600"></span></div>
 <div class="flex gap-2"><a th:href="@{'/blog/'+${b.id}}" class="bg-black text-white px-4 py-1.5 rounded-full font-bold text-sm">View</a><a th:href="@{'/delete/'+${b.id}}" class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-bold text-sm">Delete</a></div>
 </div>
@@ -50,7 +55,7 @@ html.dark.bg-gray-100{background:#334155!important}
 </div>
 </div>
 
-<div class="bg-white p-6 rounded-[24px] border shadow-sm">
+<div class="card bg-white p-6 rounded-[24px] border shadow-sm">
 <h4 class="font-black">Writing Streak 🔥</h4>
 <div class="flex gap-1.5 mt-4">
 <div class="flex-1 h-9 bg-indigo-600 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div>
