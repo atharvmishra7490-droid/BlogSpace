@@ -21,12 +21,10 @@
 <div class="bg-white p-8 rounded-[24px] shadow-sm w-full max-w-2xl">
 
 <div class="flex items-center gap-6">
-<img th:if="${user.gender == 'Male'}" th:src="'https://api.dicebear.com/7.x/avataaars/svg?seed='+${user.username}+'-male&sex=male'" class="w-28 h-28 rounded-full border-4 border-indigo-100 bg-indigo-50" alt="male avatar">
-<img th:if="${user.gender == 'Female'}" th:src="'https://api.dicebear.com/7.x/avataaars/svg?seed='+${user.username}+'-female&sex=female'" class="w-28 h-28 rounded-full border-4 border-indigo-100 bg-pink-50" alt="female avatar">
-<img th:if="${user.gender!= 'Male' and user.gender!= 'Female'}" th:src="'https://api.dicebear.com/7.x/avataaars/svg?seed='+${user.username}" class="w-28 h-28 rounded-full border-4 border-indigo-100 bg-indigo-50" alt="avatar">
+<div id="avatarBox" class="w-28 h-28 rounded-full border-4 border-indigo-100 flex items-center justify-center text-6xl select-none bg-indigo-50"></div>
 <div class="flex-1">
 <div class="flex items-center gap-3">
-<h2 id="displayName" class="text-3xl font-black" th:text="${user.username}">atharv.16</h2>
+<h2 class="text-3xl font-black" th:text="${user.username}">atharv.16</h2>
 <button onclick="toggleEdit()" class="bg-black text-white px-4 py-1.5 rounded-full text-sm font-bold">Edit</button>
 </div>
 <p class="text-gray-500" th:text="${user.email}">atharvmishra7490@gmail.com</p>
@@ -39,6 +37,11 @@
 
 <form id="editForm" action="/profile/update" method="post" class="hidden mt-8 space-y-4 border-t pt-6">
 <h3 class="font-black text-xl">Edit Profile</h3>
+<div>
+<p class="font-bold mb-2">Choose Avatar 🦊🍎🥕</p>
+<div id="avatarPicker" class="grid grid-cols-8 gap-2 p-3 bg-[#f6f6f9] rounded-2xl max-h-48 overflow-y-auto"></div>
+<input type="hidden" id="selectedAvatarInput" name="avatarIndex">
+</div>
 <div class="grid grid-cols-2 gap-4">
 <input name="username" th:value="${user.username}" placeholder="Username" class="border-2 p-3 rounded-xl">
 <input name="age" th:value="${user.age}" placeholder="Age (11-99)" type="number" min="11" max="99" class="border-2 p-3 rounded-xl focus:border-indigo-600 outline-none">
@@ -55,20 +58,56 @@
 </div>
 </form>
 
-<div class="mt-8 grid grid-cols-3 gap-4 text-center">
-<div class="bg-[#f6f6f9] p-4 rounded-xl"><p class="font-black text-xl" th:text="${postCount}">0</p><p class="text-sm text-gray-500">Posts</p></div>
-<div class="bg-[#f6f6f9] p-4 rounded-xl"><p class="font-black text-xl">0</p><p class="text-sm text-gray-500">Followers</p></div>
-<div class="bg-[#f6f6f9] p-4 rounded-xl"><p class="font-black text-xl">0</p><p class="text-sm text-gray-500">Following</p></div>
-</div>
+<!-- POSTS FOLLOWERS WALA HATA DIYA -->
 
 </div>
 </div>
 </div>
 
-<script>
-function toggleEdit(){
-  document.getElementById('editForm').classList.toggle('hidden');
-}
+<script th:inline="javascript">
+function toggleEdit(){ document.getElementById('editForm').classList.toggle('hidden'); }
+const username = /*[[${user.username}]]*/ "atharv16";
+const avatars = [
+  {emoji:"🦊", bg:"bg-orange-100"}, {emoji:"🐼", bg:"bg-gray-100"}, {emoji:"🐶", bg:"bg-yellow-100"},
+  {emoji:"🦁", bg:"bg-amber-100"}, {emoji:"🐨", bg:"bg-green-100"}, {emoji:"🐵", bg:"bg-orange-50"},
+  {emoji:"🐯", bg:"bg-yellow-50"}, {emoji:"🐻", bg:"bg-amber-50"}, {emoji:"🐹", bg:"bg-lime-100"},
+  {emoji:"🐰", bg:"bg-pink-50"}, {emoji:"🦝", bg:"bg-gray-50"}, {emoji:"🐮", bg:"bg-stone-100"},
+  {emoji:"🐷", bg:"bg-pink-100"}, {emoji:"🐸", bg:"bg-green-50"}, {emoji:"🐙", bg:"bg-purple-50"},
+  {emoji:"🦄", bg:"bg-fuchsia-100"}, {emoji:"🐧", bg:"bg-slate-100"}, {emoji:"🐢", bg:"bg-emerald-50"},
+  {emoji:"🍎", bg:"bg-red-100"}, {emoji:"🍌", bg:"bg-yellow-100"}, {emoji:"🍇", bg:"bg-purple-100"},
+  {emoji:"🍓", bg:"bg-pink-100"}, {emoji:"🥭", bg:"bg-orange-100"}, {emoji:"🍍", bg:"bg-yellow-50"},
+  {emoji:"🍉", bg:"bg-red-100"}, {emoji:"🥝", bg:"bg-lime-100"}, {emoji:"🍊", bg:"bg-orange-50"},
+  {emoji:"🥕", bg:"bg-orange-100"}, {emoji:"🌽", bg:"bg-yellow-100"}, {emoji:"🥦", bg:"bg-green-100"},
+  {emoji:"🍅", bg:"bg-red-50"}, {emoji:"🥑", bg:"bg-green-50"}, {emoji:"🍆", bg:"bg-purple-50"},
+  {emoji:"🌶️", bg:"bg-red-100"}, {emoji:"🍄", bg:"bg-stone-100"}, {emoji:"🐝", bg:"bg-yellow-50"},
+  {emoji:"🦋", bg:"bg-purple-50"}, {emoji:"🐠", bg:"bg-blue-50"}
+];
+let hash = 0;
+for(let i=0; i<username.length; i++){ hash = hash * 31 + username.charCodeAt(i); }
+let saved = localStorage.getItem('avatar_'+username);
+let pickedIndex = saved!== null? parseInt(saved) : Math.abs(hash) % avatars.length;
+let picked = avatars[pickedIndex];
+const box = document.getElementById('avatarBox');
+box.innerText = picked.emoji;
+box.className = `w-28 h-28 rounded-full border-4 border-indigo-100 flex items-center justify-center text-6xl select-none ${picked.bg}`;
+document.getElementById('selectedAvatarInput').value = pickedIndex;
+const picker = document.getElementById('avatarPicker');
+avatars.forEach((av, idx)=>{
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.innerText = av.emoji;
+  btn.className = `text-2xl p-2 rounded-xl hover:bg-white border-2 transition ${idx==pickedIndex? 'border-indigo-600 bg-white scale-110' : 'border-transparent'} ${av.bg}`;
+  btn.onclick = ()=>{
+    pickedIndex = idx;
+    box.innerText = av.emoji;
+    box.className = `w-28 h-28 rounded-full border-4 border-indigo-100 flex items-center justify-center text-6xl select-none ${av.bg}`;
+    document.getElementById('selectedAvatarInput').value = idx;
+    localStorage.setItem('avatar_'+username, idx);
+    [...picker.children].forEach(c=>c.classList.remove('border-indigo-600','bg-white','scale-110'));
+    btn.classList.add('border-indigo-600','bg-white','scale-110');
+  };
+  picker.appendChild(btn);
+});
 </script>
 </body>
 </html>
