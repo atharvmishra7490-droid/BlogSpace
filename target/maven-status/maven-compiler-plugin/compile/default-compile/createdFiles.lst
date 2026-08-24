@@ -1,3 +1,4 @@
+com\BlogSpace\PageController.class
 com\BlogSpace\AuthController.class
 com\BlogSpace\Blog.class
 com\BlogSpace\SecurityConfig.class

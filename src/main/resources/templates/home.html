@@ -1,18 +1,81 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"><style>body{font-family:'Inter',sans-serif}</style></head>
-<body class="bg-[#f8fafc] flex">
-<div class="w-72 h-screen bg-[#0f0f0f] text-white p-6 fixed flex flex-col">
-<div class="flex items-center gap-3 mb-10"><div class="w-9 h-9 bg-white text-black rounded-lg flex items-center justify-center font-bold">B</div><h1 class="text-xl font-bold">BlogSpace</h1></div>
-<nav class="space-y-2 flex-1">
-<a href="/" class="flex items-center gap-3 py-3 px-4 bg-white text-black rounded-xl font-semibold">🏠 Home</a>
-<a href="/create" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl transition">✏️ Create Blog</a>
-<a href="/explore" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl transition">🔍 Explore</a>
-<a href="/dashboard" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl transition">📊 Dashboard</a>
-<a href="/profile" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl transition">👤 Profile</a>
-</nav>
-<div class="pt-6 border-t border-white/10 text-sm text-gray-400">© 2026 BlogSpace</div>
-</div>
-<div class="ml-72 w-full p-10">
-<h1 class="text-4xl font-bold text-gray-900">For You</h1><p class="text-gray-500 mt-2">Latest blogs from community</p>
-<div class="mt-8 grid gap-6 max-w-4xl">
-<div class="bg-white p-7 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition"><div class="flex gap-3 items-center"><div class="w-10 h-10 bg-blue-100 rounded-full"></div><div><p class="font-semibold">Atharv Mishra</p><p class="text-xs text-gray-500">2 hours ago • Java</p></div></div><h2 class="text-xl font-bold mt-4">How I Built BlogSpace with Spring Boot</h2><p class="text-gray-600 mt-2 line-clamp-2">A complete guide to build a scalable blogging platform...</p></div>
-</div></div></body></html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>BlogSpace | Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+    <!-- Drawer Navigation Overlay -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+    <aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-slate-900 text-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between p-6">
+        <div class="space-y-6">
+            <div class="flex justify-between items-center">
+                <span class="text-xl font-bold text-indigo-400"><i class="fa-solid fa-layer-group"></i> Menu</span>
+                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <nav class="space-y-2">
+                <a href="/home" class="block px-4 py-2.5 rounded-lg bg-indigo-600 text-white font-medium"><i class="fa-solid fa-house w-6"></i> Home</a>
+                <a href="/explore" class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white font-medium"><i class="fa-solid fa-compass w-6"></i> Explore</a>
+                <a href="/create" class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white font-medium"><i class="fa-solid fa-pen-to-square w-6"></i> Create Post</a>
+                <a href="/dashboard" class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white font-medium"><i class="fa-solid fa-chart-line w-6"></i> Dashboard</a>
+                <a href="/profile" class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white font-medium"><i class="fa-solid fa-user w-6"></i> Profile Settings</a>
+            </nav>
+        </div>
+        <div>
+            <a href="/login" class="block text-center w-full py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 text-sm font-semibold">Account Login</a>
+        </div>
+    </aside>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 bg-white border-b border-slate-200 z-30">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100"><i class="fa-solid fa-bars text-lg"></i></button>
+                <a href="/" class="font-bold text-xl text-indigo-600 flex items-center gap-2"><i class="fa-solid fa-layer-group"></i> BlogSpace</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="/explore" class="text-slate-600 hover:text-indigo-600 font-medium text-sm">Explore</a>
+                <a href="/create" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700">Write Article</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10 space-y-8 flex-grow">
+        <!-- Hero Section -->
+        <div class="bg-gradient-to-r from-indigo-900 to-slate-900 text-white rounded-2xl p-8 md:p-12 shadow-xl space-y-4">
+            <span class="bg-indigo-600/50 text-indigo-300 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Welcome</span>
+            <h1 class="text-3xl md:text-5xl font-black tracking-tight">The Modern Standard for Professional Blogging</h1>
+            <p class="text-slate-300 max-w-xl text-base">Explore tech insights, deployable code, and high-impact writing from creators worldwide.</p>
+        </div>
+
+        <!-- Latest Posts Stream -->
+        <div class="space-y-6">
+            <h2 class="text-2xl font-bold text-slate-800">Featured Articles</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div th:each="blog : ${blogs}" class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition space-y-3 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-600 uppercase" th:text="${blog.category}">Category</span>
+                        <a th:href="@{'/blog/' + ${blog.id}}">
+                            <h3 class="text-xl font-bold text-slate-900 hover:text-indigo-600 transition mt-1" th:text="${blog.title}">Title</h3>
+                        </a>
+                        <p class="text-slate-600 text-sm line-clamp-3 mt-2" th:text="${blog.content}">Content...</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                        <span th:text="${blog.author != null ? blog.author.username : 'Anonymous'}">Author</span>
+                        <span th:text="${#temporals.format(blog.createdAt, 'MMM dd, yyyy')}">Date</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+            document.getElementById('sidebar-overlay').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

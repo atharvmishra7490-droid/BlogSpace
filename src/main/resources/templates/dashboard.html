@@ -1,20 +1,55 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-[#f8fafc] flex">
-<div class="w-72 h-screen bg-[#0f0f0f] text-white p-6 fixed flex flex-col">
-<div class="flex items-center gap-3 mb-10"><div class="w-9 h-9 bg-white text-black rounded-lg flex items-center justify-center font-bold">B</div><h1 class="text-xl font-bold">BlogSpace</h1></div>
-<nav class="space-y-2 flex-1">
-<a href="/" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl">🏠 Home</a>
-<a href="/create" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl">✏️ Create Blog</a>
-<a href="/explore" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl">🔍 Explore</a>
-<a href="/dashboard" class="flex items-center gap-3 py-3 px-4 bg-white text-black rounded-xl font-semibold">📊 Dashboard</a>
-<a href="/profile" class="flex items-center gap-3 py-3 px-4 hover:bg-white/10 rounded-xl">👤 Profile</a>
-</nav></div>
-<div class="ml-72 w-full p-10">
-<h1 class="text-4xl font-bold">Dashboard</h1><p class="text-gray-500 mt-2">Your blog performance</p>
-<div class="mt-8 grid grid-cols-3 gap-6 max-w-5xl">
-<div class="bg-white p-7 rounded-2xl border"><p class="text-sm text-gray-500">Total Blogs</p><h2 class="text-4xl font-bold mt-3">12</h2><p class="text-sm text-green-600 mt-2">+2 this week</p></div>
-<div class="bg-white p-7 rounded-2xl border"><p class="text-sm text-gray-500">Total Views</p><h2 class="text-4xl font-bold mt-3">24.5k</h2><p class="text-sm text-green-600 mt-2">+12% growth</p></div>
-<div class="bg-white p-7 rounded-2xl border"><p class="text-sm text-gray-500">Drafts</p><h2 class="text-4xl font-bold mt-3">3</h2><p class="text-sm text-gray-500 mt-2">Finish them</p></div>
-</div>
-<div class="mt-8 bg-white rounded-2xl border max-w-5xl"><div class="p-6 border-b font-bold">Recent Blogs</div><div class="p-6 flex justify-between border-b"><span>How I Built BlogSpace</span><span class="text-gray-500">Published</span></div><div class="p-6 flex justify-between"><span>My Java Notes</span><span class="text-yellow-600">Draft</span></div></div>
-</div></body></html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>BlogSpace | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <div class="max-w-7xl mx-auto px-6 py-10 space-y-8">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-extrabold">Management Dashboard</h1>
+                <p class="text-sm text-slate-500 mt-1">Logged in as: <span th:text="${currentUser.username}" class="font-bold text-indigo-600">User</span> (<span th:text="${currentUser.role}">Role</span>)</p>
+            </div>
+            <a href="/create" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 text-sm">+ New Post</a>
+        </div>
+
+        <!-- Real-Time Metric Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                <span class="text-xs font-bold text-slate-400 uppercase">Platform Global Posts</span>
+                <p class="text-3xl font-black text-slate-900 mt-2" th:text="${totalBlogsCount}">0</p>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                <span class="text-xs font-bold text-indigo-600 uppercase">Your Published Articles</span>
+                <p class="text-3xl font-black text-indigo-600 mt-2" th:text="${userBlogsCount}">0</p>
+            </div>
+        </div>
+
+        <!-- Manage Articles Table -->
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-slate-100 text-xs font-bold uppercase text-slate-500 border-b border-slate-200">
+                    <tr>
+                        <th class="p-4">Title</th>
+                        <th class="p-4">Category</th>
+                        <th class="p-4">Author</th>
+                        <th class="p-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-sm">
+                    <tr th:each="blog : ${blogs}">
+                        <td class="p-4 font-bold text-slate-800" th:text="${blog.title}">Title</td>
+                        <td class="p-4 text-slate-500" th:text="${blog.category}">Category</td>
+                        <td class="p-4 text-slate-500" th:text="${blog.author != null ? blog.author.username : 'Unknown'}">Author</td>
+                        <td class="p-4">
+                            <a th:href="@{'/blogs/delete/' + ${blog.id}}" onclick="return confirm('Confirm deletion?')" class="px-3 py-1 bg-red-50 text-red-600 rounded-md font-semibold text-xs hover:bg-red-100">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

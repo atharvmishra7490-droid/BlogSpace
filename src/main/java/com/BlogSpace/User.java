@@ -1,17 +1,47 @@
 package com.BlogSpace;
+
 import jakarta.persistence.*;
-@Entity @Table(name="users")
+import java.util.List;
+
+@Entity
+@Table(name = "users")
 public class User {
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
-	@Column(unique=true) private String username;
-	@Column(unique=true) private String email;
-	private String password; private String phone; private Integer age; private String gender; private String bio;
-	public Long getId(){return id;} public void setId(Long id){this.id=id;}
-	public String getUsername(){return username;} public void setUsername(String s){this.username=s;}
-	public String getEmail(){return email;} public void setEmail(String s){this.email=s;}
-	public String getPassword(){return password;} public void setPassword(String s){this.password=s;}
-	public String getPhone(){return phone;} public void setPhone(String s){this.phone=s;}
-	public Integer getAge(){return age;} public void setAge(Integer s){this.age=s;}
-	public String getGender(){return gender;} public void setGender(String s){this.gender=s;}
-	public String getBio(){return bio;} public void setBio(String s){this.bio=s;}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    private String fullName;
+    private String bio;
+    private String role; // "ROLE_USER" or "ROLE_ADMIN"
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Blog> blogs;
+
+    public User() {}
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getBio() { return bio; }
+    public void setBio(String bio) { this.bio = bio; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+    public List<Blog> getBlogs() { return blogs; }
+    public void setBlogs(List<Blog> blogs) { this.blogs = blogs; }
 }
