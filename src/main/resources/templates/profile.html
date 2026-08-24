@@ -6,7 +6,6 @@
 </head>
 <body class="bg-[#f6f6f9]">
 <div class="flex">
-<!-- Sidebar -->
 <div class="w-72 bg-white h-screen fixed shadow p-7">
 <h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1>
 <nav class="mt-10 space-y-2">
@@ -21,9 +20,10 @@
 <div class="ml-72 p-10 w-full flex justify-center">
 <div class="bg-white p-8 rounded-[24px] shadow-sm w-full max-w-2xl">
 
-<!-- Header -->
 <div class="flex items-center gap-6">
-<img id="avatarImg" th:src="'https://api.dicebear.com/7.x/avataaars/svg?seed='+${user.username}" class="w-28 h-28 rounded-full border-4 border-indigo-100 bg-indigo-50" alt="avatar">
+<img th:if="${user.gender == 'Male'}" th:src="'https://api.dicebear.com/7.x/avataaars/svg?seed='+${user.username}+'-male&sex=male'" class="w-28 h-28 rounded-full border-4 border-indigo-100 bg-indigo-50" alt="male avatar">
+<img th:if="${user.gender == 'Female'}" th:src="'https://api.dicebear.com/7.x/avataaars/svg?seed='+${user.username}+'-female&sex=female'" class="w-28 h-28 rounded-full border-4 border-indigo-100 bg-pink-50" alt="female avatar">
+<img th:if="${user.gender!= 'Male' and user.gender!= 'Female'}" th:src="'https://api.dicebear.com/7.x/avataaars/svg?seed='+${user.username}" class="w-28 h-28 rounded-full border-4 border-indigo-100 bg-indigo-50" alt="avatar">
 <div class="flex-1">
 <div class="flex items-center gap-3">
 <h2 id="displayName" class="text-3xl font-black" th:text="${user.username}">atharv.16</h2>
@@ -37,12 +37,11 @@
 </div>
 </div>
 
-<!-- Edit Form (hidden by default) -->
 <form id="editForm" action="/profile/update" method="post" class="hidden mt-8 space-y-4 border-t pt-6">
 <h3 class="font-black text-xl">Edit Profile</h3>
 <div class="grid grid-cols-2 gap-4">
 <input name="username" th:value="${user.username}" placeholder="Username" class="border-2 p-3 rounded-xl">
-<input name="age" th:value="${user.age}" placeholder="Age" type="number" class="border-2 p-3 rounded-xl">
+<input name="age" th:value="${user.age}" placeholder="Age (11-99)" type="number" min="11" max="99" class="border-2 p-3 rounded-xl focus:border-indigo-600 outline-none">
 </div>
 <input name="email" th:value="${user.email}" placeholder="Email" class="w-full border-2 p-3 rounded-xl">
 <select name="gender" class="w-full border-2 p-3 rounded-xl">
@@ -56,7 +55,6 @@
 </div>
 </form>
 
-<!-- Stats / Posts will come here -->
 <div class="mt-8 grid grid-cols-3 gap-4 text-center">
 <div class="bg-[#f6f6f9] p-4 rounded-xl"><p class="font-black text-xl" th:text="${postCount}">0</p><p class="text-sm text-gray-500">Posts</p></div>
 <div class="bg-[#f6f6f9] p-4 rounded-xl"><p class="font-black text-xl">0</p><p class="text-sm text-gray-500">Followers</p></div>
