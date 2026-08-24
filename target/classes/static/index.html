@@ -37,9 +37,9 @@ input,textarea{background:var(--input);border:1px solid var(--border);color:var(
 <div id="authView">
 <div class="hero"><h1>Where<br><span>stories</span><br>find you.</h1><p style="color:var(--muted);font-size:18px;line-height:1.6;margin-top:16px">Premium writing experience. Dark mode included. Login to unlock Recent Blogs.</p></div>
 <div class="card"><h3 style="margin:0 0 4px">Welcome back 👋</h3><p style="margin:0 0 18px;color:var(--muted);font-size:13px">Login to continue</p>
-<input id="username" placeholder="Username (for Register)" oninput="validateAuth()">
-<input id="email" placeholder="Email must end with .com" oninput="validateAuth()">
-<input id="password" type="password" placeholder="Password (min 3 chars)" oninput="validateAuth()">
+<input id="username" placeholder="Username e.g. ankur123" oninput="validateAuth()">
+<input id="email" placeholder="Email e.g. ankur123@gmail.com" oninput="validateAuth()">
+<input id="password" type="password" placeholder="Password e.g. abc123 (6+ with letters+numbers)" oninput="validateAuth()">
 <div class="captcha" id="captchaBox" onclick="loadCaptcha()">Loading...</div>
 <input id="captchaAns" placeholder="Enter captcha answer" oninput="validateAuth()">
 <div style="display:flex;gap:10px;margin-top:14px">
@@ -70,13 +70,18 @@ function toggleTheme(){ let cur = document.documentElement.getAttribute('data-th
 
 function validateAuth(){
  let u=username.value.trim(), e=email.value.trim().toLowerCase(), p=password.value.trim(), c=captchaAns.value.trim();
- let emailOk = e.includes('@') && e.endsWith('.com') && e.length>7;
- let passOk = p.length>=3;
+ // FIXED: Proper email check - must have @ and .com
+ let emailOk = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.com$/.test(e) && e.includes('@');
+ let userOk = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,20}$/.test(u);
+ let passOk = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/.test(p);
  let allFilledLogin = e && p && c && emailOk && passOk;
- let allFilledReg = u && e && p && c && emailOk && passOk;
+ let allFilledReg = u && e && p && c && emailOk && userOk && passOk;
  loginBtn.disabled = !allFilledLogin;
  regBtn.disabled = !allFilledReg;
- if(e && !emailOk){ showErr('Email must contain @ and end with .com'); } else { hideErr(); }
+ if(e && !emailOk){ showErr('Invalid email! Must be like ankur123@gmail.com (must have @ and end with .com). atharv.com not allowed'); } 
+ else if(u && !userOk && username.value){ showErr('Username: letters + numbers both, e.g. ankur123 (4-20 chars)'); }
+ else if(p && !passOk && password.value){ showErr('Password: min 6 chars with letters + numbers, e.g. abc123'); }
+ else { hideErr(); }
 }
 function showErr(m){ errMsg.style.display='block'; errMsg.innerText=m; }
 function hideErr(){ errMsg.style.display='none'; }
@@ -84,7 +89,6 @@ function hideErr(){ errMsg.style.display='none'; }
 async function loadCaptcha(){let r=await fetch('/api/auth/captcha');let d=await r.json();captchaId=d.captchaId;captchaBox.innerText=d.question+' (click to refresh)';}
 async function register(){
   let uName=username.value.trim(), eMail=email.value.trim(), pass=password.value.trim(), ans=captchaAns.value.trim();
-  if(!eMail.toLowerCase().endsWith('.com')){ alert('Email must end with .com'); return; }
   let r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:uName,email:eMail,password:pass,captchaId,captchaAnswer:ans})});
   let j=await r.json();
   if(r.ok){ alert('Registered! Now Login'); username.value=''; password.value=''; captchaAns.value=''; validateAuth(); loadCaptcha(); }
@@ -104,34 +108,20 @@ function checkState(){
   else{ authView.style.display='grid'; appView.style.display='none'; userInfo.innerText=''; userInfo.style.display='none'; logoutBtn.style.display='none'; }
 }
 async function loadBlogs(){let r=await fetch('/api/blogs');allBlogs=await r.json();render(allBlogs);}
-function render(list){let u=JSON.parse(localStorage.getItem('user')||'null');let uid=u?u.id:null;let isAdmin=localStorage.getItem('adminMode')=='true';blogs.innerHTML=list.map(b=>{let btn='';if(uid&&b.ownerId==uid)btn=`<button class="btn btn-ghost" style="font-size:12px;margin-top:10px" onclick="deleteBlog(${b.id})">Delete</button>`;if(isAdmin)btn=`<button class="btn" style="background:#ef4444;color:white;font-size:12px;margin-top:10px" onclick="deleteBlogAdmin(${b.id})">ADMIN DELETE</button>`;return `<div class="blogCard"><h3 style="margin:0 0 8px">${b.title}</h3><p style="color:var(--muted);line-height:1.6;font-size:14px;white-space:pre-wrap">${b.content}</p><div style="display:flex;justify-content:space-between;margin-top:14px"><span class="badge">👤 ${b.author||'Anon'} • ${b.createdAt?new Date(b.createdAt).toLocaleDateString():''}</span>${btn}</div></div>`}).join('')||'<div class="blogCard" style="text-align:center;color:var(--muted)">No blogs yet. Be first!</div>';}
+function render(list){let u=JSON.parse(localStorage.getItem('user')||'null');let uid=u?u.id:null;let isAdmin=localStorage.getItem('adminMode')=='true';blogs.innerHTML=list.map(b=>{let btn='';if(uid&&b.ownerId==uid)btn=`<button class="btn btn-ghost" style="font-size:12px;margin-top:10px" onclick="deleteBlog(${b.id})">Delete</button>`;if(isAdmin)btn=`<button class="btn" style="background:#ef4444;color:white;font-size:12px;margin-top:10px" onclick="deleteBlogAdmin(${b.id})">ADMIN DELETE</button>`;let photo=b.authorPhoto||'https://i.pravatar.cc/150?u='+b.author;return `<div class="blogCard"><div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><img src="${photo}" style="width:36px;height:36px;border-radius:50%"><span class="badge">👤 ${b.author||'Anon'} • ${b.createdAt?new Date(b.createdAt).toLocaleDateString():''}</span></div><h3 style="margin:0 0 8px">${b.title}</h3><p style="color:var(--muted);line-height:1.6;font-size:14px;white-space:pre-wrap">${b.content}</p><div style="display:flex;justify-content:space-between;margin-top:14px"><span></span>${btn}</div></div>`}).join('')||'<div class="blogCard" style="text-align:center;color:var(--muted)">No blogs yet. Be first!</div>';}
 function filterBlogs(){let q=search.value.toLowerCase();render(allBlogs.filter(b=>b.title.toLowerCase().includes(q)||b.content.toLowerCase().includes(q)));}
 async function addBlog(){let u=JSON.parse(localStorage.getItem('user'));if(!title.value.trim()||!content.value.trim())return alert('Fill title & content');let res=await fetch('/api/blogs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title.value,content:content.value,ownerId:u.id,author:u.username})});if(res.ok){title.value='';content.value='';loadBlogs();}}
 async function deleteBlog(id){let u=JSON.parse(localStorage.getItem('user'));if(!confirm('Delete this blog?'))return;await fetch(`/api/blogs/${id}?ownerId=${u.id}`,{method:'DELETE'});loadBlogs();}
 async function deleteBlogAdmin(id){if(!confirm('Admin delete?'))return;await fetch(`/api/blogs/admin/${id}?secret=ankur123`,{method:'DELETE'});loadBlogs();}
-
-// ===== FIXED: 5 CLICK TOGGLE ON/OFF =====
 let c=0;
 logoTitle.addEventListener('click',()=>{
-  c++;
-  if(c===5){
+  c++; if(c===5){
     let isAdmin = localStorage.getItem('adminMode')=='true';
-    if(isAdmin){
-      localStorage.removeItem('adminMode');
-      alert('Admin OFF 🔒');
-      location.reload();
-    } else {
-      let s=prompt('Admin secret:');
-      if(s==='ankur123'){
-        localStorage.setItem('adminMode','true');
-        alert('Admin ON 🔓');
-        location.reload();
-      }
-    }
+    if(isAdmin){ localStorage.removeItem('adminMode'); alert('Admin OFF 🔒'); location.reload(); }
+    else { let s=prompt('Admin secret:'); if(s==='ankur123'){ localStorage.setItem('adminMode','true'); alert('Admin ON 🔓'); location.reload(); } }
     c=0;
   }
   setTimeout(()=>c=0,3000);
 });
-
 loadCaptcha();checkState();loadBlogs();validateAuth();
 </script></body></html>
