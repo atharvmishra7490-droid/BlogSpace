@@ -1,6 +1,67 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Dashboard</title><script src="https://cdn.tailwindcss.com"></script></head>
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Dashboard</title><script src="https://cdn.tailwindcss.com"></script>
+<script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
+<style>
+html.dark body{background:#0f172a!important;color:white!important}
+html.dark.bg-white{background:#1e293b!important}
+html.dark.text-gray-500{color:#94a3b8!important}
+html.dark.bg-gray-100{background:#334155!important}
+</style>
+</head>
 <body class="bg-[#f6f6f9]"><div class="flex"><div class="w-72 bg-white h-screen fixed shadow p-7"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1><nav class="mt-10 space-y-2"><a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a><a href="/create" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Create</a><a href="/explore" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Explore</a><a href="/dashboard" class="flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold">Dashboard</a><a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a><a href="/settings" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Settings</a></nav></div>
-<div class="ml-72 p-10 w-full"><h1 class="text-4xl font-black">Dashboard</h1>
-<div class="grid grid-cols-4 gap-6 mt-8"><div class="bg-white p-7 rounded-[20px] shadow-sm"><p class="text-gray-500 font-bold">Total Blogs</p><p class="text-4xl font-black mt-2" th:text="${total}">0</p></div><div class="bg-white p-7 rounded-[20px] shadow-sm"><p class="text-gray-500 font-bold">My Blogs</p><p class="text-4xl font-black mt-2" th:text="${my}">0</p></div><div class="bg-white p-7 rounded-[20px] shadow-sm"><p class="text-gray-500 font-bold">Today Posted</p><p class="text-4xl font-black mt-2" th:text="${today}">0</p></div><div class="bg-white p-7 rounded-[20px] shadow-sm"><p class="text-gray-500 font-bold">Active Users</p><p class="text-4xl font-black mt-2" th:text="${active}">0</p></div></div>
-<h3 class="mt-10 font-black text-2xl">My Blogs</h3><div class="mt-4 space-y-3"><div th:each="b:${myBlogs}" class="bg-white p-5 rounded-xl flex justify-between items-center"><span th:text="${b.title}" class="font-bold"></span><a th:href="@{'/delete/'+${b.id}}" class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-bold">Delete</a></div></div>
+
+<div class="ml-72 p-8 w-full">
+<div class="flex justify-between items-end"><div><h1 class="text-4xl font-black">Dashboard</h1><p class="text-gray-500 mt-1">Track your writing journey</p></div><a href="/create" class="bg-black text-white px-6 py-3 rounded-full font-bold">+ New Blog</a></div>
+
+<div class="grid grid-cols-4 gap-5 mt-8">
+<div class="bg-white p-6 rounded-[24px] shadow-sm border hover:shadow-md transition"><div class="flex justify-between"><div class="w-11 h-11 bg-indigo-100 rounded-xl flex items-center justify-center">📚</div><span class="bg-green-50 text-green-600 text-xs px-3 py-1 rounded-full font-bold h-fit">↗ Live</span></div><p class="text-gray-500 font-bold text-sm mt-4">Total Blogs</p><p class="text-4xl font-black mt-1" th:text="${total}">0</p><div class="mt-3 h-1.5 bg-gray-100 rounded-full"><div class="h-1.5 w-[75%] bg-indigo-600 rounded-full"></div></div></div>
+<div class="bg-white p-6 rounded-[24px] shadow-sm border hover:shadow-md transition"><div class="w-11 h-11 bg-yellow-100 rounded-xl flex items-center justify-center">✍️</div><p class="text-gray-500 font-bold text-sm mt-4">My Blogs</p><p class="text-4xl font-black mt-1" th:text="${my}">0</p><p class="text-xs text-gray-400 mt-2">Your creations</p></div>
+<div class="bg-white p-6 rounded-[24px] shadow-sm border hover:shadow-md transition"><div class="flex justify-between"><div class="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center">🔥</div><span class="bg-orange-50 text-orange-600 text-xs px-2 py-1 rounded-full font-bold h-fit">Today</span></div><p class="text-gray-500 font-bold text-sm mt-4">Today Posted</p><p class="text-4xl font-black mt-1" th:text="${today}">0</p><p class="text-xs text-gray-400 mt-2">Keep posting!</p></div>
+<div class="bg-gradient-to-br from-indigo-600 to-violet-600 p-6 rounded-[24px] shadow-lg text-white"><div class="flex justify-between"><div class="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center">👥</div><span class="bg-white/20 text-xs px-3 py-1 rounded-full h-fit">● Online</span></div><p class="text-indigo-200 font-bold text-sm mt-4">Active Users</p><p class="text-4xl font-black mt-1" th:text="${active}">1</p><p class="text-xs text-indigo-200 mt-2">Community growing</p></div>
+</div>
+
+<div class="flex gap-6 mt-6">
+<div class="flex-1">
+<h3 class="font-black text-2xl">My Blogs</h3>
+
+<div th:if="${#lists.isEmpty(myBlogs)}" class="bg-white p-12 rounded-[24px] shadow-sm border mt-4 text-center">
+<div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto text-4xl">✨</div>
+<h4 class="font-black text-xl mt-4">No blogs yet? Let's change that!</h4>
+<p class="text-gray-500 text-sm mt-2 max-w-sm mx-auto">Your dashboard is empty because you haven't written anything. Create your first story and see stats here.</p>
+<div class="flex justify-center gap-3 mt-6 opacity-20">
+<div class="w-24 h-16 bg-gray-100 rounded-xl"></div><div class="w-24 h-16 bg-gray-100 rounded-xl"></div><div class="w-24 h-16 bg-gray-100 rounded-xl"></div>
+</div>
+<a href="/create" class="inline-block mt-6 bg-indigo-600 text-white px-8 py-3 rounded-full font-bold">Create First Blog →</a>
+</div>
+
+<div class="mt-4 space-y-3">
+<div th:each="b:${myBlogs}" class="bg-white p-5 rounded-2xl border flex justify-between items-center hover:border-black hover:shadow-md transition group">
+<div class="flex gap-3 items-center"><div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">📝</div><span th:text="${b.title}" class="font-bold group-hover:text-indigo-600"></span></div>
+<div class="flex gap-2"><a th:href="@{'/blog/'+${b.id}}" class="bg-black text-white px-4 py-1.5 rounded-full font-bold text-sm">View</a><a th:href="@{'/delete/'+${b.id}}" class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-bold text-sm">Delete</a></div>
+</div>
+</div>
+</div>
+
+<div class="w-[330px] space-y-5">
+<div class="bg-black text-white p-6 rounded-[24px]">
+<h4 class="font-black">Quick Actions</h4>
+<div class="mt-4 space-y-2">
+<a href="/create" class="flex justify-between bg-white/10 p-3.5 rounded-xl hover:bg-white/20"><span>✍️ New Blog</span><span>→</span></a>
+<a href="/explore" class="flex justify-between bg-white/10 p-3.5 rounded-xl hover:bg-white/20"><span>🔍 Explore Feed</span><span>→</span></a>
+</div>
+</div>
+
+<div class="bg-white p-6 rounded-[24px] border shadow-sm">
+<h4 class="font-black">Writing Streak 🔥</h4>
+<div class="flex gap-1.5 mt-4">
+<div class="flex-1 h-9 bg-indigo-600 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div><div class="flex-1 h-9 bg-gray-100 rounded-lg"></div>
+</div>
+<p class="text-xs text-gray-500 mt-3 text-center">1 day streak • Keep it up!</p>
+</div>
+
+<div class="bg-gradient-to-br from-yellow-50 to-orange-50 border border-yellow-200 p-5 rounded-[24px]">
+<p class="font-black text-sm">💡 Tip</p><p class="text-sm mt-1 text-gray-700">Post at 9 AM for max reach. Your audience is most active in morning.</p>
+</div>
+</div>
+</div>
+
 </div></div></body></html>
