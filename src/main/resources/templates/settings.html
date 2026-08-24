@@ -1,8 +1,72 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Settings</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body id="body" class="bg-[#f6f6f9] transition"><div class="flex"><div class="w-72 bg-white h-screen fixed shadow p-7"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1><nav class="mt-10 space-y-2"><a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a><a href="/create" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Create</a><a href="/explore" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Explore</a><a href="/dashboard" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Dashboard</a><a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a><a href="/settings" class="flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold">Settings</a></nav></div>
-<div class="ml-72 p-10 w-full"><div class="bg-white p-8 rounded-[24px] shadow-sm max-w-xl space-y-6">
+<body id="body" class="bg-[#f6f6f9] transition duration-300">
+<div class="flex">
+<div id="sidebar" class="w-72 bg-white h-screen fixed shadow p-7 transition duration-300">
+<h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1>
+<nav class="mt-10 space-y-2">
+<a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a>
+<a href="/create" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Create</a>
+<a href="/explore" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Explore</a>
+<a href="/dashboard" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Dashboard</a>
+<a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a>
+<a href="/settings" class="flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold">Settings</a>
+</nav></div>
+
+<div class="ml-72 p-10 w-full">
+<div id="card" class="bg-white p-8 rounded-[24px] shadow-sm max-w-xl space-y-6 transition duration-300">
 <h2 class="text-3xl font-black">Settings</h2>
-<div class="flex justify-between items-center border-2 p-5 rounded-xl"><div><p class="font-bold">Theme</p><p class="text-sm text-gray-500">Light / Dark mode</p></div><button onclick="document.body.classList.toggle('bg-[#0f0f19]');document.body.classList.toggle('text-white')" class="bg-black text-white px-6 py-2 rounded-full font-bold">Toggle</button></div>
-<div class="flex justify-between items-center border-2 p-5 rounded-xl"><div><p class="font-bold">Language</p><p class="text-sm text-gray-500">Choose language</p></div><select class="border-2 p-2 rounded-xl"><option>English</option><option>Hindi</option><option>Spanish</option></select></div>
-<div class="flex gap-4 pt-4"><a href="/deleteAccount" onclick="return confirm('Are you sure to delete account?')" class="bg-red-600 text-white px-7 py-3 rounded-full font-bold">Delete Account</a><button onclick="if(navigator.share){navigator.share({title:'BlogSpace',text:'Join BlogSpace!',url:location.origin})}else{prompt('Copy this link',location.origin)}" class="bg-green-600 text-white px-7 py-3 rounded-full font-bold">Refer to Friends</button></div>
-</div></div></div></body></html>
+
+<div class="flex justify-between items-center border-2 p-5 rounded-xl">
+<div><p class="font-bold">Theme</p><p id="sub1" class="text-sm text-gray-500">Light / Dark mode</p></div>
+<button onclick="toggleTheme()" class="bg-black text-white px-6 py-2 rounded-full font-bold">Toggle</button>
+</div>
+
+<div class="flex justify-between items-center border-2 p-5 rounded-xl">
+<div><p class="font-bold">Language</p><p id="sub2" class="text-sm text-gray-500">Choose language</p></div>
+<select id="langSelect" class="border-2 p-2 rounded-xl bg-white"><option>English</option><option>Hindi</option><option>Spanish</option></select>
+</div>
+
+<!-- HELP & SUPPORT ADDED HERE -->
+<div class="border-2 p-5 rounded-xl space-y-3">
+<p class="font-black text-lg">Help & Support</p>
+<p class="text-sm text-gray-500">Email us at blogspace@gmail.com</p>
+<textarea id="helpText" placeholder="Describe your issue..." class="w-full border-2 p-3 rounded-xl h-24 bg-transparent"></textarea>
+<button onclick="alert('Message sent to support!')" class="bg-black text-white px-6 py-2.5 rounded-full font-bold">Send Message</button>
+</div>
+
+<div class="flex gap-4 pt-4">
+<a href="/deleteAccount" onclick="return confirm('Are you sure to delete account?')" class="bg-red-600 text-white px-7 py-3 rounded-full font-bold">Delete Account</a>
+<button onclick="if(navigator.share){navigator.share({title:'BlogSpace',text:'Join BlogSpace!',url:location.origin})}else{prompt('Copy this link',location.origin)}" class="bg-green-600 text-white px-7 py-3 rounded-full font-bold">Refer to Friends</button>
+</div>
+</div></div></div>
+
+<script>
+let isDark = localStorage.getItem('bs-theme') === 'dark';
+function applyTheme(){
+  const body = document.getElementById('body');
+  const sidebar = document.getElementById('sidebar');
+  const card = document.getElementById('card');
+  const lang = document.getElementById('langSelect');
+  const helpText = document.getElementById('helpText');
+  if(isDark){
+    body.className = "bg-[#0f0f19] text-white transition duration-300";
+    sidebar.className = "w-72 bg-[#1e1e2e] h-screen fixed shadow p-7 transition duration-300 text-white";
+    card.className = "bg-[#1e1e2e] text-white p-8 rounded-[24px] shadow-sm max-w-xl space-y-6 transition duration-300";
+    lang.className = "border-2 p-2 rounded-xl bg-[#1e1e2e] text-white";
+    helpText.className = "w-full border-2 p-3 rounded-xl h-24 bg-[#2a2a3e] text-white";
+  } else {
+    body.className = "bg-[#f6f6f9] text-black transition duration-300";
+    sidebar.className = "w-72 bg-white h-screen fixed shadow p-7 transition duration-300 text-black";
+    card.className = "bg-white text-black p-8 rounded-[24px] shadow-sm max-w-xl space-y-6 transition duration-300";
+    lang.className = "border-2 p-2 rounded-xl bg-white text-black";
+    helpText.className = "w-full border-2 p-3 rounded-xl h-24 bg-white text-black";
+  }
+}
+function toggleTheme(){
+  isDark =!isDark;
+  localStorage.setItem('bs-theme', isDark? 'dark' : 'light');
+  applyTheme();
+}
+applyTheme();
+</script>
+</body></html>

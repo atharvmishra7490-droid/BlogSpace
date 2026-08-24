@@ -33,7 +33,6 @@
 
 <p th:if="${error}" th:text="${error}" class="mt-5 bg-red-50 text-red-600 text-sm font-bold p-3 rounded-xl text-center border border-red-100"></p>
 
-<!-- LOGIN FORM -->
 <form id="loginForm" action="/doLogin" method="post" class="mt-8 space-y-4">
 <h3 class="text-2xl font-black">Welcome back 👋</h3>
 <p class="text-gray-500 -mt-3">Login to continue writing</p>
@@ -43,15 +42,20 @@
 <button class="w-full bg-black text-white py-4 rounded-xl font-black text-base hover:bg-gray-900 transition flex justify-center gap-2 items-center"><span>Login</span> <i class="fa fa-arrow-right"></i></button>
 </form>
 
-<!-- SIGNUP FORM -->
 <form id="signupForm" action="/signup" method="post" class="mt-8 space-y-3 hidden">
 <h3 class="text-2xl font-black">Create account ✨</h3>
 <p class="text-gray-500 -mt-3">Start your journey for free</p>
 <div class="grid grid-cols-1 gap-3 mt-6">
 <input name="username" required minlength="3" placeholder="Username (min 3 chars)" class="w-full border-2 p-3.5 rounded-xl outline-none focus:border-indigo-600 font-medium"/>
-<input name="email" type="email" required placeholder="Email address" class="w-full border-2 p-3.5 rounded-xl outline-none focus:border-indigo-600 font-medium"/>
+<input name="email" type="email" required pattern="[a-zA-Z0-9._%+\-]+@gmail\.com$" title="Only gmail.com allowed - e.g. username@gmail.com" placeholder="Email (username@gmail.com)" class="w-full border-2 p-3.5 rounded-xl outline-none focus:border-indigo-600 font-medium"/>
 <input name="password" type="password" required minlength="6" placeholder="Password (min 6 chars)" class="w-full border-2 p-3.5 rounded-xl outline-none focus:border-indigo-600 font-medium"/>
-<div class="flex gap-3"><input name="age" type="number" required placeholder="Age" class="w-1/2 border-2 p-3.5 rounded-xl outline-none"/><select name="gender" class="w-1/2 border-2 p-3.5 rounded-xl outline-none"><option>Male</option><option>Female</option><option>Other</option></select></div>
+<div class="flex gap-3"><input name="age" type="number" required placeholder="Age" class="w-1/2 border-2 p-3.5 rounded-xl outline-none"/>
+<select name="gender" required class="w-1/2 border-2 p-3.5 rounded-xl outline-none bg-white">
+<option value="" disabled selected>Select Gender</option>
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+<option value="Other">Other</option>
+</select></div>
 <div class="bg-indigo-50 border-2 border-indigo-100 p-3 rounded-xl flex justify-between items-center font-black"><span th:text="${captchaQ}" class="text-indigo-600">2 + 3 =?</span><input name="captchaAns" type="number" required placeholder="Ans" class="border-2 w-20 p-2 rounded-lg text-center font-bold outline-none"/></div>
 </div>
 <button class="w-full bg-indigo-600 text-white py-4 rounded-xl font-black text-base hover:bg-indigo-700 transition mt-2">Create Account</button>
