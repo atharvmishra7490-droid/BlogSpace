@@ -1,18 +1,122 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Create</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-[#f6f6f9]"><div class="flex"><div class="w-72 bg-white h-screen fixed shadow p-7"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1><nav class="mt-10 space-y-2"><a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a><a href="/create" class="flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold">Create</a><a href="/explore" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Explore</a><a href="/dashboard" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Dashboard</a><a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a><a href="/settings" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Settings</a></nav></div>
-<div class="ml-72 p-10 w-full"><div class="bg-white p-8 rounded-[24px] shadow-xl max-w-4xl">
-<h2 class="text-3xl font-black mb-6">Create New Blog</h2>
-<form action="/publish" method="post">
-<input name="title" required placeholder="Blog Title..." class="w-full border-2 p-4 rounded-xl mb-4 text-2xl font-bold outline-none focus:border-indigo-600"/>
-<div class="flex gap-2 mb-3 border-2 p-3 rounded-xl bg-gray-50 flex-wrap">
-<button type="button" onclick="document.execCommand('bold')" class="px-4 py-2 border bg-white rounded-xl font-black">B</button>
-<button type="button" onclick="document.execCommand('italic')" class="px-4 py-2 border bg-white rounded-xl italic font-bold">I</button>
-<button type="button" onclick="document.execCommand('underline')" class="px-4 py-2 border bg-white rounded-xl underline font-bold">U</button>
-<input type="color" onchange="document.execCommand('foreColor',false,this.value)" class="w-10 h-10 rounded" title="Color"/>
-<select onchange="document.execCommand('fontName',false,this.value)" class="border-2 rounded-xl px-3 py-2"><option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="Courier New">Mono</option><option value="Times New Roman">Times</option></select>
-<select onchange="document.execCommand('fontSize',false,this.value)" class="border-2 rounded-xl px-3 py-2"><option value="3">Normal</option><option value="5">Large</option><option value="7">Huge</option></select>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Create - BlogSpace</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+html.dark body{background:#0f172a!important;color:white!important}
+html.dark.card{background:#1e293b!important;color:white!important;border-color:#334155!important}
+html.dark.input-dark{background:#0f172a!important;color:white!important;border-color:#334155!important}
+.editor:focus{outline:none}
+.editor:empty:before{content:attr(data-placeholder);color:#9ca3af}
+</style>
+</head>
+<body class="bg-[#f6f6f9]"><div class="flex">
+<div class="w-72 bg-white h-screen fixed shadow p-7 border-r z-20"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1><nav class="mt-10 space-y-2"><a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a><a href="/create" class="flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200">Create</a><a href="/explore" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Explore</a><a href="/dashboard" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Dashboard</a><a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a><a href="/settings" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Settings</a></nav></div>
+
+<div class="ml-72 p-6 w-full flex gap-6">
+<!-- CENTER EDITOR -->
+<div class="flex-1 max-w-4xl">
+<div class="flex justify-between items-center mb-4">
+<a href="/dashboard" class="text-sm font-bold text-gray-500">← Back</a>
+<p class="text-xs font-bold text-gray-400"><span id="wordCount">0</span> words • <span id="readTime">0 min</span> read • Auto saved</p>
 </div>
-<div id="editor" contenteditable="true" class="w-full border-2 h-[380px] p-5 rounded-xl overflow-auto outline-none focus:border-indigo-600 text-lg" data-placeholder="Start writing your story..."></div>
+
+<div class="card bg-white p-8 rounded-[24px] shadow-xl">
+<h2 class="text-3xl font-black">Create New Blog</h2>
+
+<form action="/publish" method="post" id="blogForm" class="mt-6">
+<input name="title" id="titleInput" required placeholder="Blog Title..." class="input-dark w-full border-2 p-4 rounded-xl mb-4 text-2xl font-bold outline-none focus:border-indigo-600"/>
+
+<!-- PREMIUM TOOLBAR -->
+<div class="flex gap-2 mb-3 border-2 p-2.5 rounded-2xl bg-gray-50 flex-wrap items-center sticky top-2 z-10">
+<button type="button" onclick="format('bold')" class="px-4 py-2 border bg-white rounded-xl font-black hover:bg-black hover:text-white transition">B</button>
+<button type="button" onclick="format('italic')" class="px-4 py-2 border bg-white rounded-xl italic font-bold hover:bg-black hover:text-white transition">I</button>
+<button type="button" onclick="format('underline')" class="px-4 py-2 border bg-white rounded-xl underline font-bold hover:bg-black hover:text-white transition">U</button>
+<div class="w-px h-6 bg-gray-200"></div>
+<button type="button" onclick="format('insertUnorderedList')" class="px-3 py-2 border bg-white rounded-xl"><i class="fa-solid fa-list-ul"></i></button>
+<button type="button" onclick="format('insertOrderedList')" class="px-3 py-2 border bg-white rounded-xl"><i class="fa-solid fa-list-ol"></i></button>
+<button type="button" onclick="format('formatBlock','h2')" class="px-3 py-2 border bg-white rounded-xl font-bold">H1</button>
+<button type="button" onclick="format('formatBlock','blockquote')" class="px-3 py-2 border bg-white rounded-xl"><i class="fa-solid fa-quote-left"></i></button>
+<input type="color" onchange="formatColor(this.value)" class="w-10 h-10 rounded-xl cursor-pointer border-2" title="Text Color"/>
+<select onchange="document.execCommand('fontName',false,this.value)" class="border-2 rounded-xl px-3 py-2 bg-white"><option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="Courier New">Mono</option><option value="Times New Roman">Times</option></select>
+<select onchange="document.execCommand('fontSize',false,this.value)" class="border-2 rounded-xl px-3 py-2 bg-white"><option value="3">Normal</option><option value="5">Large</option><option value="7">Huge</option></select>
+<button type="button" onclick="addLink()" class="px-3 py-2 border bg-white rounded-xl"><i class="fa-solid fa-link"></i></button>
+</div>
+
+<div id="editor" contenteditable="true" class="w-full border-2 h-[380px] p-5 rounded-xl overflow-auto outline-none focus:border-indigo-600 text-[17px] leading-7" data-placeholder="Start writing your amazing story..."></div>
 <textarea name="content" id="hiddenContent" class="hidden"></textarea>
-<button type="submit" onclick="document.getElementById('hiddenContent').value=document.getElementById('editor').innerHTML" class="mt-6 bg-indigo-600 text-white px-10 py-4 rounded-full font-black text-lg">Publish Blog</button>
-</form></div></div></div></body></html>
+
+<div class="flex gap-3 mt-6">
+<button type="submit" class="bg-indigo-600 text-white px-10 py-4 rounded-full font-black text-lg hover:bg-black transition shadow-lg shadow-indigo-200">Publish Blog 🚀</button>
+<button type="button" class="px-8 py-4 rounded-full font-bold border-2 hover:bg-gray-50">Save Draft</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- RIGHT SIDE - Jo khali tha usko premium bana diya -->
+<div class="w-[340px] space-y-5 hidden lg:block">
+<div class="card bg-black text-white p-6 rounded-[24px] sticky top-6">
+<h3 class="font-black">✨ Writing Power</h3>
+<div class="mt-4 space-y-3">
+<div class="flex justify-between bg-white/10 p-3 rounded-xl text-sm"><span>SEO</span><span class="text-green-400 font-bold">Good</span></div>
+<div class="bg-white/10 p-3 rounded-xl text-xs"><div class="flex justify-between mb-2"><span>Progress</span><span id="progressText">0%</span></div><div class="h-1.5 bg-white/20 rounded-full"><div id="progressBar" class="h-1.5 bg-white rounded-full w-0 transition-all"></div></div></div>
+</div>
+<ul class="mt-5 space-y-2 text-xs text-gray-400 leading-5">
+<li>💡 1200+ words = Google me rank</li>
+<li>💡 1 cover image = 94% more views</li>
+<li>💡 Title me number use karo</li>
+</ul>
+</div>
+
+<div class="card bg-white p-6 rounded-[24px] border shadow-sm">
+<h4 class="font-black text-sm">Live Preview 👀</h4>
+<div class="mt-3 p-4 bg-[#f6f6f9] rounded-xl border-2 border-dashed">
+<p id="previewTitle" class="font-bold">Your title...</p>
+<p id="previewContent" class="text-xs text-gray-400 mt-2 line-clamp-4">Your story preview will appear here as you type...</p>
+</div>
+<div class="mt-3 flex gap-2"><span class="text-[10px] bg-green-50 text-green-600 px-2 py-1 rounded-full font-bold">● SEO Ready</span><span class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-1 rounded-full font-bold" id="previewWords">0 words</span></div>
+</div>
+
+<div class="card bg-gradient-to-br from-yellow-50 to-orange-50 border border-yellow-200 p-5 rounded-[24px]">
+<p class="font-black text-sm">🔥 Template</p>
+<div class="grid grid-cols-2 gap-2 mt-3 text-xs font-bold">
+<button type="button" onclick="insertTemplate('story')" class="bg-white py-2.5 rounded-xl border hover:bg-black hover:text-white transition">📖 Story</button>
+<button type="button" onclick="insertTemplate('howto')" class="bg-white py-2.5 rounded-xl border hover:bg-black hover:text-white transition">🛠️ How-to</button>
+</div>
+</div>
+</div>
+
+</div></div>
+
+<script>
+function format(cmd,val){
+  if(val) document.execCommand(cmd,false,val);
+  else document.execCommand(cmd,false,null);
+  document.getElementById('editor').focus();
+}
+function formatColor(c){document.execCommand('foreColor',false,c);}
+function addLink(){let url=prompt('Paste link:'); if(url) document.execCommand('createLink',false,url);}
+function insertTemplate(type){
+  const e=document.getElementById('editor');
+  if(type==='story') e.innerHTML='<h2>My Story Begins...</h2><p>It was a day...</p>';
+  else e.innerHTML='<h2>How to...</h2><p><b>Step 1:</b>...</p><p><b>Step 2:</b>...</p>';
+  e.dispatchEvent(new Event('input'));
+}
+
+const editor=document.getElementById('editor');
+const title=document.getElementById('titleInput');
+editor.addEventListener('input',()=>{
+  const text=editor.innerText.trim();
+  const words=text?text.split(/\s+/).length:0;
+  document.getElementById('wordCount').innerText=words;
+  document.getElementById('previewWords').innerText=words+' words';
+  document.getElementById('readTime').innerText=Math.max(1,Math.ceil(words/200))+' min';
+  document.getElementById('previewContent').innerText=text.substring(0,130)||'Your story preview...';
+  document.getElementById('hiddenContent').value=editor.innerHTML;
+  let p=Math.min(100,Math.floor((words/500)*100)); document.getElementById('progressBar').style.width=p+'%'; document.getElementById('progressText').innerText=p+'%';
+});
+title.addEventListener('input',()=>{document.getElementById('previewTitle').innerText=title.value||'Your title...';});
+document.getElementById('blogForm').addEventListener('submit',()=>{document.getElementById('hiddenContent').value=editor.innerHTML;});
+</script>
+</body></html>
