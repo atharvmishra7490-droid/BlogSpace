@@ -1,5 +1,54 @@
 <!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Explore</title><script src="https://cdn.tailwindcss.com"></script></head>
 <body class="bg-[#f6f6f9]"><div class="flex"><div class="w-72 bg-white h-screen fixed shadow p-7"><h1 class="text-2xl font-black text-indigo-600">BlogSpace.</h1><nav class="mt-10 space-y-2"><a href="/home" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Home</a><a href="/create" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Create</a><a href="/explore" class="flex gap-3 p-3.5 bg-indigo-600 text-white rounded-xl font-bold">Explore</a><a href="/dashboard" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Dashboard</a><a href="/profile" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Profile</a><a href="/settings" class="flex gap-3 p-3.5 hover:bg-gray-100 rounded-xl">Settings</a></nav></div>
-<div class="ml-72 p-10 w-full"><div class="flex justify-between items-center"><h1 class="text-4xl font-black">Explore Blogs</h1><form class="flex gap-2"><input name="q" placeholder="Search by title..." class="border-2 p-3 rounded-full w-80 px-6 outline-none focus:border-indigo-600"/><button class="bg-black text-white px-8 rounded-full font-bold">Search</button></form></div>
-<div class="grid md:grid-cols-2 gap-6 mt-8"><div th:each="b:${blogs}" class="bg-white p-6 rounded-[20px] shadow-sm hover:shadow-xl transition"><a th:href="@{'/blog/'+${b.id}}" th:text="${b.title}" class="font-black text-xl hover:text-indigo-600"></a><p class="text-sm text-gray-500 mt-1" th:text="${b.authorName}+' • '+${#temporals.format(b.createdAt,'dd MMM yyyy HH:mm')}"></p><div th:utext="${b.content}" class="mt-3 text-gray-700 line-clamp-3"></div></div></div>
+
+<div class="ml-72 p-8 w-full flex gap-8">
+<!-- LEFT MAIN -->
+<div class="flex-1">
+<div class="flex justify-between items-center"><div><h1 class="text-4xl font-black">Explore Blogs</h1><p class="text-gray-500 mt-1">Discover what's trending</p></div><form class="flex gap-2"><input name="q" th:value="${param.q}" placeholder="Search by title..." class="border-2 p-3 rounded-full w-80 px-6 outline-none focus:border-indigo-600 bg-white"/><button class="bg-black text-white px-8 rounded-full font-bold">Search</button></form></div>
+
+<div class="flex gap-3 mt-6 mb-2">
+<a href="/explore" class="bg-black text-white px-5 py-2 rounded-full text-sm font-bold">All 🔥</a>
+<a href="/explore?q=tech" class="bg-white border px-5 py-2 rounded-full text-sm">Tech 💻</a>
+<a href="/explore?q=life" class="bg-white border px-5 py-2 rounded-full text-sm">Life 🌱</a>
+<a href="/explore?q=travel" class="bg-white border px-5 py-2 rounded-full text-sm">Travel ✈️</a>
+</div>
+
+<!-- Empty State -->
+<div th:if="${#lists.isEmpty(blogs)}" class="bg-white rounded-[24px] p-16 text-center mt-6">
+<div class="text-7xl mb-4">📚</div><h2 class="text-2xl font-black">No blogs found</h2><p class="text-gray-500 mt-2">Try different search or be the first to create!</p><a href="/create" class="inline-block mt-6 bg-indigo-600 text-white px-8 py-3 rounded-full font-bold">+ Create Blog</a>
+</div>
+
+<div class="grid md:grid-cols-2 gap-6 mt-6"><div th:each="b:${blogs}" class="bg-white p-6 rounded-[20px] shadow-sm hover:shadow-xl transition group"><a th:href="@{'/blog/'+${b.id}}" th:text="${b.title}" class="font-black text-xl group-hover:text-indigo-600 line-clamp-2"></a><p class="text-sm text-gray-500 mt-2" th:text="${b.authorName}+' • '+${#temporals.format(b.createdAt,'dd MMM yyyy HH:mm')}"></p><div th:utext="${b.content}" class="mt-3 text-gray-700 line-clamp-3 text-sm leading-relaxed"></div><div class="flex justify-between items-center mt-4"><span class="bg-indigo-50 text-indigo-600 text-xs px-3 py-1 rounded-full font-bold">#trending</span><a th:href="@{'/blog/'+${b.id}}" class="text-sm font-bold">Read →</a></div></div></div>
+</div>
+
+<!-- RIGHT RECOMMENDATION -->
+<div class="w-[350px] space-y-6">
+<div class="bg-white p-6 rounded-[20px] shadow-sm">
+<h3 class="font-black text-lg">🔥 Trending Topics</h3>
+<div class="mt-5 space-y-4">
+<div class="flex justify-between"><div><p class="font-bold text-sm">#JavaScript Mastery</p><p class="text-xs text-gray-500">2.4k posts • Trending in Tech</p></div><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold h-fit">↗ Hot</span></div>
+<div class="flex justify-between"><div><p class="font-bold text-sm">#AI Revolution 2026</p><p class="text-xs text-gray-500">1.8k posts • AI</p></div><span class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-bold h-fit">New</span></div>
+<div class="flex justify-between"><div><p class="font-bold text-sm">#College Placements</p><p class="text-xs text-gray-500">1.2k posts • Career</p></div><span class="text-xs bg-gray-100 px-2 py-1 rounded-full h-fit">Top</span></div>
+<div class="flex justify-between"><div><p class="font-bold text-sm">#Startup Stories</p><p class="text-xs text-gray-500">890 posts</p></div></div>
+<div class="flex justify-between"><div><p class="font-bold text-sm">#Hostel Life</p><p class="text-xs text-gray-500">650 posts</p></div></div>
+</div>
+</div>
+
+<div class="bg-white p-6 rounded-[20px] shadow-sm">
+<h3 class="font-black text-lg">✨ Recommended For You</h3>
+<p class="text-xs text-gray-500 mt-1">Based on your interests</p>
+<div class="mt-5 space-y-4">
+<div class="flex gap-3"><div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">🐶</div><div><p class="font-bold text-sm line-clamp-1">How I Cracked My First Internship</p><p class="text-xs text-gray-500">By rahul • 4 min read • 🔥 234 likes</p></div></div>
+<div class="flex gap-3"><div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">🐼</div><div><p class="font-bold text-sm line-clamp-1">5 AM Morning Routine That Works</p><p class="text-xs text-gray-500">By sneha • 3 min read</p></div></div>
+<div class="flex gap-3"><div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">🦊</div><div><p class="font-bold text-sm line-clamp-1">My Journey at Google Summer</p><p class="text-xs text-gray-500">By aman_dev • 6 min read</p></div></div>
+</div>
+<a href="/create" class="block text-center mt-5 bg-black text-white py-3 rounded-full font-bold text-sm">Start Writing Today</a>
+</div>
+
+<div class="bg-indigo-600 p-6 rounded-[20px] text-white">
+<h3 class="font-black text-lg">BlogSpace Community</h3><p class="text-indigo-200 text-sm mt-1">500+ writers sharing stories daily</p>
+<div class="flex gap-6 mt-4"><div><p class="text-xl font-black">1.2k</p><p class="text-xs text-indigo-200">Blogs</p></div><div><p class="text-xl font-black">500+</p><p class="text-xs text-indigo-200">Writers</p></div><div><p class="text-xl font-black">10k</p><p class="text-xs text-indigo-200">Reads</p></div></div>
+</div>
+</div>
+
 </div></div></body></html>
